@@ -50,9 +50,15 @@ class Hotel
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BusyDays", mappedBy="hotel")
+     */
+    private $busyDays;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->busyDays = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +151,37 @@ class Hotel
             // set the owning side to null (unless already changed)
             if ($comment->getHotel() === $this) {
                 $comment->setHotel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BusyDays[]
+     */
+    public function getBusyDays(): Collection
+    {
+        return $this->busyDays;
+    }
+
+    public function addBusyDay(BusyDays $busyDay): self
+    {
+        if (!$this->busyDays->contains($busyDay)) {
+            $this->busyDays[] = $busyDay;
+            $busyDay->setHotel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBusyDay(BusyDays $busyDay): self
+    {
+        if ($this->busyDays->contains($busyDay)) {
+            $this->busyDays->removeElement($busyDay);
+            // set the owning side to null (unless already changed)
+            if ($busyDay->getHotel() === $this) {
+                $busyDay->setHotel(null);
             }
         }
 
