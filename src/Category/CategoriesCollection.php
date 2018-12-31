@@ -8,8 +8,20 @@
 
 namespace App\Category;
 
+use App\Dto\Category;
 
-class CategoriesCollection
+class CategoriesCollection implements \IteratorAggregate
 {
+    private $categories;
 
+    public function __construct(Category ...$categories)
+    {
+        $this->categories = $categories;
+    }
+
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->categories);
+    }
 }

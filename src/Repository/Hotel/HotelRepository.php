@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Hotel;
 
 use App\Entity\Hotel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -12,39 +12,32 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Hotel[]    findAll()
  * @method Hotel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class HotelRepository extends ServiceEntityRepository
+class HotelRepository extends ServiceEntityRepository implements HotelRepositoryInterface
 {
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Hotel::class);
     }
 
-    // /**
-    //  * @return Hotel[] Returns an array of Hotel objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllWithCategories()
     {
         return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('h.id', 'ASC')
-            ->setMaxResults(10)
+            ->innerJoin('h.category','c')
+            ->addSelect('c')
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Hotel
+    public function findAllByCategory(string $category)
     {
         return $this->createQueryBuilder('h')
-            ->andWhere('h.exampleField = :val')
-            ->setParameter('val', $value)
+            ->innerJoin('h.category','c')
+            ->addSelect('c')
+            ->andWhere('c.name = :category')
+            ->setParameter('category',$category)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult()
+            ;
     }
-    */
 }

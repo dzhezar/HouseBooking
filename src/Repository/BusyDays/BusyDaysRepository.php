@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\BusyDays;
 
 use App\Entity\BusyDays;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

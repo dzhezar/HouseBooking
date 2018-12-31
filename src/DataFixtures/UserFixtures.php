@@ -9,20 +9,18 @@ use Faker\Factory;
 
 class UserFixtures extends Fixture
 {
-    private const NAMES = ['Anton','Hera','Gosha'];
-
     public function load(ObjectManager $manager)
     {
-        // $faker = Factory::create();
-
-        foreach (self::NAMES as $key => $userName) {
+        $faker = Factory::create();
+        for ($i = 0; $i<5 ; $i++) {
             $user = new User();
             $user
-                ->setName($userName);
+                ->setName($faker->name())
+                ;
 
             $manager->persist($user);
 
-            $this->addReference(User::class . '_' . $key, $user);
+            $this->addReference(User::class . '_' . $i, $user);
         }
         $manager->flush();
     }

@@ -17,11 +17,14 @@ class DefaultController extends AbstractController
 {
     public function index(qq $qq): Response
     {
-        $hotels = $qq->getUsers();
+        $hotels = $qq->getHotels();
+        $users = $qq->getUsers();
+        $categories = $qq->getCategories();
 
-        dd($hotels);
         return $this->render('base.html.twig',[
-            'hotels' => $hotels
+            'hotels' => $hotels,
+            'users' => $users,
+            'categories' => $categories
         ]);
 
     }

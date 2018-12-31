@@ -12,34 +12,14 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\Hotel;
 use App\Entity\User;
-use App\Repository\CategoryRepository;
-use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory;
 
-class HotelFixtures extends Fixture
+class HotelFixtures extends Fixture implements DependentFixtureInterface
 {
-    private $categoryRepository;
-    private $userRepository;
 
-    public function __construct(CategoryRepository $categoryRepository, UserRepository $userRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-        $this->userRepository = $userRepository;
-    }
-
-    public function getCategories()
-    {
-        $categories = $this->categoryRepository->findAll();
-        return $categories;
-    }
-
-    public function getUsers()
-    {
-        $categories = $this->categoryRepository->findAll();
-        return $categories;
-    }
     /**
      * Load data fixtures with the passed EntityManager
      *
@@ -47,23 +27,38 @@ class HotelFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-     //   dd($manager->getRepository(User::class));
 
         $faker = Factory::create();
 
         for ($i = 0; $i<5; $i++){
             $hotel = new Hotel();
+            $category = $this->getReference(Category::class.'_'.$faker->numberBetween(0,2));
+            $owner = $this->getReference(User::class.'_'.$faker->numberBetween(0,2));
 
             $hotel
-                ->setName($faker->name())
+                ->setName($faker->sentence)
                 ->setImage($faker->imageUrl())
                 ->setAddress($faker->address)
-                ->setOwner($faker->randomElement($this->userRepository->findAll()))
-                ->setCategory($faker->randomElement($this->categoryRepository->findAll()))
+                ->setOwner($owner)
+                ->setCategory($category)
             ;
             $manager->persist($hotel);
 
         }
         $manager->flush();
+    }
+
+    /**
+     * This method must return an array of fixtures classes
+     * on which the implementing class depends on
+     *
+     * @return array
+     */
+    public function getDependencies()
+    {
+        return array(
+            UserFixtures::class
+        );
+
     }
 }

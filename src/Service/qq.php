@@ -9,10 +9,12 @@
 namespace App\Service;
 
 
-use App\Repository\CategoryRepository;
-use App\Repository\HotelRepository;
-use App\Repository\UserRepository;
-use Faker\Factory;
+use App\Hotel\HotelCollection;
+use App\Hotel\HotelMapper;
+use App\Repository\Category\CategoryRepository;
+use App\Repository\Hotel\HotelRepository;
+use App\Repository\User\UserRepository;
+
 
 class qq
 {
@@ -29,20 +31,23 @@ class qq
 
     public function getCategories()
     {
-        $categories = $this->categoryRepository->findAll();
-        return $categories;
+
     }
 
     public function getHotels()
     {
-        $hotels = $this->hotelRepository->findAll();
-        return $hotels;
+        $hotels = $this->hotelRepository->findAllWithCategories();
+        $collection = new HotelCollection();
+        $dataMapper = new HotelMapper();
+        foreach ($hotels as $hotel) {
+            $collection->addHotel($dataMapper->entityToDto($hotel));
+        }
+        return $collection;
     }
 
     public function getUsers()
     {
-        $faker = Factory::create();
-        $users = ($faker->randomElement($this->userRepository->findAll()));
+        $users = $this->userRepository->findAll();
         return $users;
     }
 }
