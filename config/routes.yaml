@@ -1,3 +1,10 @@
 index:
     path: /
     controller: App\Controller\DefaultController::index
+search:
+    path: /search
+    controller: App\Controller\DefaultController::search
+hotel:
+    path: /hotel/{id}
+    controller: App\Controller\DefaultController::showHotel
+

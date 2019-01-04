@@ -1,1 +1,82 @@
 {% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+        <div style=" position: relative;
+  text-align: center;
+  color: white;">
+            <img src="/images/1529396719_krym.png" alt="Paris" style="width: 100%">
+            <div class="form-row" style="position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);">
+                {{ form_start(form,
+                    {'attr': {'autocomplete': 'off'}}) }}
+                    {{ form_widget(form.City,
+                        {'attr': {'class': 'form-group col-md-8', 'placeholder': 'Place you wanna visit' }}) }}
+                <div id="ajax-result" class="ajax-result">
+                </div>
+                    {{ form_widget(form.Guests,
+                        {'attr': {'class': 'form-group col-md-3', 'value': '2', 'min': '1', 'max': '15'}}) }}
+                <div class="form-group col-md-8" style="margin: auto">
+                        <input type="text" class="form-group" name="daterange" style="width: 100%" value="01/01/2018 - 01/15/2018">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+                {{ form_end(form) }}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 20px">
+            <div class="col-lg-3 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#">Hotel One</a>
+                        </h4>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#">Hotel Two</a>
+                        </h4>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#">Hotel Three</a>
+                        </h4>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="#">Hotel Two</a>
+                        </h4>
+                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            {{ form_start(form) }}
+                {{ form_widget(form.City,
+                    {'attr': {'class': 'form-control', 'placeholder': 'Place you wanna visit'}}) }}
+            {{ form_end(form) }}
+        </div>
+{% endblock %}

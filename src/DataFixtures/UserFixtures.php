@@ -12,7 +12,7 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        for ($i = 0; $i<5 ; $i++) {
+        for ($i = 0; $i<20 ; $i++) {
             $user = new User();
             $user
                 ->setName($faker->name())

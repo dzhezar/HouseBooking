@@ -19,7 +19,10 @@ class CategoriesCollection implements \IteratorAggregate
         $this->categories = $categories;
     }
 
-
+    public function addCategory(Category $category)
+    {
+        $this->categories[] = $category;
+    }
     public function getIterator()
     {
         return new \ArrayIterator($this->categories);

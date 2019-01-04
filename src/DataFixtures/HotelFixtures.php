@@ -10,6 +10,7 @@ namespace App\DataFixtures;
 
 
 use App\Entity\Category;
+use App\Entity\City;
 use App\Entity\Hotel;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -30,10 +31,11 @@ class HotelFixtures extends Fixture implements DependentFixtureInterface
 
         $faker = Factory::create();
 
-        for ($i = 0; $i<5; $i++){
+        for ($i = 0; $i < 100; $i++){
             $hotel = new Hotel();
             $category = $this->getReference(Category::class.'_'.$faker->numberBetween(0,2));
             $owner = $this->getReference(User::class.'_'.$faker->numberBetween(0,2));
+            $city = $this->getReference(City::class.'_'.$faker->numberBetween(0,9));
 
             $hotel
                 ->setName($faker->sentence)
@@ -41,22 +43,21 @@ class HotelFixtures extends Fixture implements DependentFixtureInterface
                 ->setAddress($faker->address)
                 ->setOwner($owner)
                 ->setCategory($category)
+                ->setCity($city)
+                ->setDescription($faker->text(750))
             ;
             $manager->persist($hotel);
 
+            $this->addReference(Hotel::class . '_' . $i, $hotel);
         }
         $manager->flush();
     }
 
-    /**
-     * This method must return an array of fixtures classes
-     * on which the implementing class depends on
-     *
-     * @return array
-     */
+
     public function getDependencies()
     {
         return array(
+            CategoryFixtures::class,
             UserFixtures::class
         );
 

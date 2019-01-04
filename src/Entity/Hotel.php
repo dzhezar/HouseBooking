@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\HotelRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Hotel\HotelRepository")
  */
 class Hotel
 {
@@ -54,6 +54,18 @@ class Hotel
      * @ORM\OneToMany(targetEntity="App\Entity\BusyDays", mappedBy="hotel")
      */
     private $busyDays;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="hotels")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
 
     public function __construct()
     {
@@ -184,6 +196,30 @@ class Hotel
                 $busyDay->setHotel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

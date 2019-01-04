@@ -16,6 +16,7 @@ class CategoryMapper
 {
     public function entityToDto(Category $entity): CategoryDto
     {
+
         return new CategoryDto(
             $entity->getName()
         );
