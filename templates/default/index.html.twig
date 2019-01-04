@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
+    {% block stylesheets %}
+        <script src ="js/dataPicker.js"></script>
+        <script src ="js/ajaxSearch.js"></script>
+    {% endblock %}
 {% block body %}
-    <div class="container" style="padding-top: 50px; padding-bottom: 50px">
+
+    <div class="container-fluid" style="padding-top: 50px; padding-bottom: 50px; width: 85% ">
         <div style=" position: relative;
   text-align: center;
   color: white;">
@@ -25,53 +30,22 @@
                 </div>
 
             </div>
-        </div>
+
 
         <div class="row" style="padding-top: 20px">
+            {% for hotel in mainHotels %}
             <div class="col-lg-3 col-sm-6 portfolio-item">
                 <div class="card h-100">
-                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                    <a href="#"><img class="card-img-top" src="{{ hotel.image }}" alt=""></a>
                     <div class="card-body">
                         <h4 class="card-title">
-                            <a href="#">Hotel One</a>
+                            <a href="{{ path('hotel',{'id': hotel.id }) }}">{{ hotel.name }}</a>
                         </h4>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+                        <p class="card-text">{{ hotel.description | slice(1,100) }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-6 portfolio-item">
-                <div class="card h-100">
-                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <a href="#">Hotel Two</a>
-                        </h4>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 portfolio-item">
-                <div class="card h-100">
-                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <a href="#">Hotel Three</a>
-                        </h4>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6 portfolio-item">
-                <div class="card h-100">
-                    <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
-                    <div class="card-body">
-                        <h4 class="card-title">
-                            <a href="#">Hotel Two</a>
-                        </h4>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-                    </div>
-                </div>
-            </div>
+           {% endfor %}
         </div>
         <div class="col-6">
             {{ form_start(form) }}
@@ -79,4 +53,5 @@
                     {'attr': {'class': 'form-control', 'placeholder': 'Place you wanna visit'}}) }}
             {{ form_end(form) }}
         </div>
+    </div>
 {% endblock %}

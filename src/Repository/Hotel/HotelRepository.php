@@ -77,8 +77,13 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
 //        return $stmt->fetchAll();
 //    }
 
-    public function ajaxSearch(string $data)
+
+    public function findNumberOfHotels(int $count)
     {
-        // TODO: Implement ajaxSearch() method.
+        return $this->createQueryBuilder('h')
+            ->setMaxResults($count)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 }

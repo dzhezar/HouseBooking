@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container-fluid" style="width: 85%; padding-top: 20px">
+        <div class="row">
+            <div class="col-md-5 ">
+                <img class="img-fluid" src="{{ hotel.image }}" alt="">
+            </div>
+            <div class="col-md-7" align="justify">
+                <h3 class="my-3">{{ hotel.name }}</h3>
+                <p>
+                    {{ hotel.description }}
+                </p>
+                <h3 class="my-3">Hotel Facilities</h3>
+                <ul>
+                    <li>{{ hotel.address }}</li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div class="card my-4" style="width: 40%">
+            <h5 class="card-header">Leave a Comment:</h5>
+            <div class="card-body">
+                <form>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <iframe width="50%" height="600px" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?hl=en&amp;ie=UTF8&amp;ll=50.446064, 30.521711&amp;spn=50.446064, 30.521711&amp;t=m&amp;z=12&amp;output=embed"></iframe>
+        {% for comment in comments %}
+        <div class="media mb-4" style="width: 40%">
+            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+            <div class="media-body">
+                <h5 class="mt-0">{{ comment.author }}</h5>
+                {{ comment.text }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

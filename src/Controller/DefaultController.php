@@ -9,6 +9,8 @@
 namespace App\Controller;
 
 
+use App\Entity\Comment;
+use App\Entity\Hotel;
 use App\Form\HomeForm;
 use App\Service\Home\HomePageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +24,8 @@ class DefaultController extends AbstractController
 
         $form = $this->createForm(HomeForm::class);
         $form->handleRequest($request);
+        $mainHotels =
+            $this->getDoctrine()->getRepository(Hotel::class)->findNumberOfHotels(4);
 
         if($form->isSubmitted() && $form->isValid()) {
             $searchResult = $service->searchHotels($form->getData());
@@ -33,7 +37,8 @@ class DefaultController extends AbstractController
         }
 
         return $this->render('default/index.html.twig',[
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'mainHotels' => $mainHotels
         ]);
     }
 
@@ -56,7 +61,12 @@ class DefaultController extends AbstractController
 
     public function showHotel(string $id, HomePageServiceInterface $service)
     {
+        $cooments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['hotel' => $id]);
         $hotel = $service->getHotel($id);
-        dd($hotel);
+
+        return $this->render('default/hotel.html.twig',[
+            'hotel' => $hotel,
+            'comments' => $cooments
+        ]);
     }
 }
