@@ -53,7 +53,8 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     {
         return array(
             HotelFixtures::class,
-            UserFixtures::class
+            UserFixtures::class,
+            CategoryFixtures::class
         );
     }
 }

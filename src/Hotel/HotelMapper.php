@@ -16,6 +16,8 @@ use App\Comment\CommentsCollection;
 use App\Comment\CommentsMapper;
 use App\Dto\Hotel as HotelDto;
 use App\Entity\Hotel;
+use App\Images\ImageCollection;
+use App\Images\ImageMapper;
 use App\User\UserMapper;
 
 class HotelMapper
@@ -38,17 +40,24 @@ class HotelMapper
         foreach ($busyDays as $busyday){
             $busyDaysCollection->addBusyDay($busyDaysMapper->entityToDtoWithoutHotel($busyday));
         }
+
+        $imagesCollection = new ImageCollection();
+        $imageMapper = new ImageMapper();
+        $images = $entity->getImages();
+        foreach ($images as $image){
+            $imagesCollection->addImage($imageMapper->entityToDtoWithoutHotel($image));
+        }
         return new HotelDto(
             $entity->getId(),
             $entity->getName(),
             $entity->getAddress(),
-            $entity->getImage(),
             $userMapper->entityToDto($entity->getOwner()),
             $categoryMapper->entityToDto($entity->getCategory()),
             $commentsCollection,
             $busyDaysCollection,
             $entity->getDescription(),
-            $entity->getPrice()
+            $entity->getPrice(),
+            $imagesCollection
         );
     }
 }

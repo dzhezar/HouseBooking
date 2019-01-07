@@ -29,11 +29,6 @@ class Hotel
     private $address;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $image;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="hotels")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -71,11 +66,17 @@ class Hotel
      */
     private $price;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="hotel")
+     */
+    private $images;
+
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->busyDays = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,18 +104,6 @@ class Hotel
     public function setAddress(string $address): self
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): self
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -237,6 +226,37 @@ class Hotel
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Images[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setHotel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getHotel() === $this) {
+                $image->setHotel(null);
+            }
+        }
 
         return $this;
     }

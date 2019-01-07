@@ -11,18 +11,22 @@ namespace App\Service\Home;
 
 use App\Hotel\HotelCollection;
 use App\Hotel\HotelMapper;
+use App\Images\ImageMapper;
 use App\Repository\City\CityRepository;
 use App\Repository\Hotel\HotelRepository;
+use App\Repository\ImagesRepository;
 
 class HomePageService implements HomePageServiceInterface
 {
     private $hotelRepository;
     private $cityRepository;
+    private $imageRepository;
 
-    public function __construct(HotelRepository $hotelRepository, CityRepository $cityRepository)
+    public function __construct(HotelRepository $hotelRepository, CityRepository $cityRepository, ImagesRepository $imageRepository)
     {
         $this->hotelRepository = $hotelRepository;
         $this->cityRepository = $cityRepository;
+        $this->imageRepository =$imageRepository;
     }
 
     public function ajaxSearch(string $text)
@@ -73,5 +77,18 @@ class HomePageService implements HomePageServiceInterface
     public function getHotel(string $id)
     {
         return $this->hotelRepository->findHotelById($id);
+
+    }
+
+    public function getMainHotels(): HotelCollection
+    {
+        $mainHotels = $this->hotelRepository->findNumberOfHotels(4);
+        $dataMapper = new HotelMapper();
+        $collention = new HotelCollection();
+
+        foreach ($mainHotels as $mainHotel){
+            $collention->addHotel($dataMapper->entityToDto($mainHotel));
+        }
+    return $collention;
     }
 }

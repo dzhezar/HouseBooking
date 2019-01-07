@@ -34,12 +34,11 @@ class HotelFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 100; $i++){
             $hotel = new Hotel();
             $category = $this->getReference(Category::class.'_'.$faker->numberBetween(0,2));
-            $owner = $this->getReference(User::class.'_'.$faker->numberBetween(0,2));
+            $owner = $this->getReference(User::class.'_'.$faker->numberBetween(0,19));
             $city = $this->getReference(City::class.'_'.$faker->numberBetween(0,9));
 
             $hotel
                 ->setName($faker->sentence)
-                ->setImage($faker->imageUrl())
                 ->setAddress($faker->address)
                 ->setOwner($owner)
                 ->setCategory($category)

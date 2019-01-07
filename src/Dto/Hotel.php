@@ -10,34 +10,35 @@ namespace App\Dto;
 
 use App\BusyDays\BusyDaysCollection;
 use App\Comment\CommentsCollection;
+use App\Images\ImageCollection;
 
 class Hotel
 {
     private $id;
     private $name;
     private $address;
-    private $image;
     private $owner;
     private $category;
     private $comments;
     private $busyDays;
     private $description;
     private $price;
+    private $images;
 
 
 
-    public function __construct(int $id, string $name, string $address, string $image, User $owner, Category $category, CommentsCollection $comments, BusyDaysCollection $busyDays, string $description, float $price)
+    public function __construct(int $id, string $name, string $address, User $owner, Category $category, CommentsCollection $comments, BusyDaysCollection $busyDays, string $description, float $price, ImageCollection $images)
     {
         $this->id = $id;
         $this->name = $name;
         $this->address = $address;
-        $this->image = $image;
         $this->owner = $owner;
         $this->category = $category;
         $this->comments = $comments;
         $this->busyDays = $busyDays;
         $this->description = $description;
         $this->price = $price;
+        $this->images = $images;
     }
 
     public function getId(): int
@@ -53,11 +54,6 @@ class Hotel
     public function getAddress(): string
     {
         return $this->address;
-    }
-
-    public function getImage(): string
-    {
-        return $this->image;
     }
 
     public function getOwner(): User
@@ -88,6 +84,11 @@ class Hotel
     public function getPrice(): float
     {
         return $this->price;
+    }
+
+    public function getImages(): ImageCollection
+    {
+        return $this->images;
     }
 
 

@@ -15,5 +15,6 @@ interface HomePageServiceInterface
     public function searchHotels(array $form);
     public function ajaxSearch(string $text);
     public function getHotel(string $id);
+    public function getMainHotels();
 
 }
