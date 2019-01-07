@@ -45,6 +45,7 @@ class HotelFixtures extends Fixture implements DependentFixtureInterface
                 ->setCategory($category)
                 ->setCity($city)
                 ->setDescription($faker->text(750))
+                ->setPrice($faker->numberBetween(1,1000))
             ;
             $manager->persist($hotel);
 

@@ -47,7 +47,8 @@ class HotelMapper
             $categoryMapper->entityToDto($entity->getCategory()),
             $commentsCollection,
             $busyDaysCollection,
-            $entity->getDescription()
+            $entity->getDescription(),
+            $entity->getPrice()
         );
     }
 }

@@ -66,6 +66,11 @@ class Hotel
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price;
+
 
     public function __construct()
     {
@@ -220,6 +225,18 @@ class Hotel
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

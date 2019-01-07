@@ -22,10 +22,11 @@ class Hotel
     private $comments;
     private $busyDays;
     private $description;
+    private $price;
 
 
 
-    public function __construct(int $id, string $name, string $address, string $image, User $owner, Category $category, CommentsCollection $comments, BusyDaysCollection $busyDays, string $description)
+    public function __construct(int $id, string $name, string $address, string $image, User $owner, Category $category, CommentsCollection $comments, BusyDaysCollection $busyDays, string $description, float $price)
     {
         $this->id = $id;
         $this->name = $name;
@@ -36,6 +37,7 @@ class Hotel
         $this->comments = $comments;
         $this->busyDays = $busyDays;
         $this->description = $description;
+        $this->price = $price;
     }
 
     public function getId(): int
@@ -82,4 +84,11 @@ class Hotel
     {
         return $this->description;
     }
+
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+
 }
