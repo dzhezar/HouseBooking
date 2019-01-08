@@ -6,7 +6,7 @@
  * Time: 17:18
  */
 
-namespace App\Service\Home;
+namespace App\Service\HomePage;
 
 
 
@@ -14,7 +14,6 @@ interface HomePageServiceInterface
 {
     public function searchHotels(array $form);
     public function ajaxSearch(string $text);
-    public function getHotel(string $id);
     public function getMainHotels();
 
 }

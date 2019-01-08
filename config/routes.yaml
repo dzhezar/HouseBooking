@@ -6,5 +6,11 @@ search:
     controller: App\Controller\DefaultController::search
 hotel:
     path: /hotel/{id}
-    controller: App\Controller\DefaultController::showHotel
+    controller: App\Controller\HotelController::showHotel
+register:
+    path: /register
+    controller: App\Controller\RefistrationController::register
+login:
+    path: /login
+    controller: App\Controller\SecurityController::login
 

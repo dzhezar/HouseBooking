@@ -17,7 +17,7 @@ class UserMapper
     public function entityToDto(User $entity): UserDto
     {
         return new UserDto(
-            $entity->getName()
+            $entity->getUsername()
         );
     }
 }

@@ -29,12 +29,6 @@ class Hotel
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="hotels")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $owner;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="hotels")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -71,6 +65,12 @@ class Hotel
      */
     private $images;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $owner;
+
 
     public function __construct()
     {
@@ -104,18 +104,6 @@ class Hotel
     public function setAddress(string $address): self
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }
@@ -257,6 +245,18 @@ class Hotel
                 $image->setHotel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

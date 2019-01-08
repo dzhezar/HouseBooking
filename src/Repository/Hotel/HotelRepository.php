@@ -62,6 +62,15 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
         return $this->findOneBy(['id' => $id]);
     }
 
+    public function findNumberOfHotels(int $count)
+    {
+        return $this->createQueryBuilder('h')
+            ->setMaxResults($count)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    public function findAllHotelsWithBusyDays()
 //    {
 //        $conn = $this->getEntityManager()->getConnection();
@@ -77,13 +86,4 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
 //        return $stmt->fetchAll();
 //    }
 
-
-    public function findNumberOfHotels(int $count)
-    {
-        return $this->createQueryBuilder('h')
-            ->setMaxResults($count)
-            ->getQuery()
-            ->getResult()
-            ;
-    }
 }

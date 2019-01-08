@@ -16,7 +16,7 @@ class Comment
     private $text;
 
 
-    public function __construct(string $author, string $text, Hotel $hotel = null)
+    public function __construct(string $text,User $author =null, Hotel $hotel = null)
     {
         $this->hotel = $hotel;
         $this->author = $author;
@@ -28,7 +28,7 @@ class Comment
         return $this->hotel;
     }
 
-    public function getAuthor(): string
+    public function getAuthor(): User
     {
         return $this->author;
     }

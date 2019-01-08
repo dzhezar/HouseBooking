@@ -12,24 +12,24 @@ namespace App\Comment;
 use App\Dto\Comment as CommentDto;
 use App\Entity\Comment;
 use App\Hotel\HotelMapper;
+use App\User\UserMapper;
 
 class CommentsMapper
 {
     public function entityToDto(Comment $entity): CommentDto
     {
         $hotelMapper = new HotelMapper();
+        $userMapper = new UserMapper();
 
         return new CommentDto(
-            $entity->getAuthor(),
+            $userMapper->entityToDto($entity->getAuthor()),
             $entity->getText(),
             $hotelMapper->entityToDto($entity->getHotel())
         );
     }
-    public function entityToDtoWithoutHotel(Comment $entity): CommentDto
+    public function entityToDtoWithOnlyText(Comment $entity): CommentDto
     {
         return new CommentDto(
-
-            $entity->getAuthor(),
             $entity->getText()
         );
     }

@@ -31,7 +31,7 @@ class HotelMapper
         $commentsMapper = new CommentsMapper();
         $comments = $entity->getComments();
         foreach ($comments as $comment) {
-            $commentsCollection->addComment($commentsMapper->entityToDtoWithoutHotel($comment));
+            $commentsCollection->addComment($commentsMapper->entityToDtoWithOnlyText($comment));
         }
 
         $busyDaysCollection = new BusyDaysCollection();

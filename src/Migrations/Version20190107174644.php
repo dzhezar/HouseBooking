@@ -8,16 +8,16 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190107020515 extends AbstractMigration
+final class Version20190107174644 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE images (id INT AUTO_INCREMENT NOT NULL, hotel_id INT DEFAULT NULL, image VARCHAR(255) NOT NULL, INDEX IDX_E01FBE6A3243BB18 (hotel_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE images ADD CONSTRAINT FK_E01FBE6A3243BB18 FOREIGN KEY (hotel_id) REFERENCES hotel (id)');
-        $this->addSql('ALTER TABLE hotel DROP image');
+        $this->addSql('ALTER TABLE hotel ADD owner_id INT NOT NULL');
+        $this->addSql('ALTER TABLE hotel ADD CONSTRAINT FK_3535ED97E3C61F9 FOREIGN KEY (owner_id) REFERENCES user (id)');
+        $this->addSql('CREATE INDEX IDX_3535ED97E3C61F9 ON hotel (owner_id)');
     }
 
     public function down(Schema $schema) : void
@@ -25,7 +25,8 @@ final class Version20190107020515 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE images');
-        $this->addSql('ALTER TABLE hotel ADD image VARCHAR(255) DEFAULT NULL COLLATE utf8mb4_unicode_ci');
+        $this->addSql('ALTER TABLE hotel DROP FOREIGN KEY FK_3535ED97E3C61F9');
+        $this->addSql('DROP INDEX IDX_3535ED97E3C61F9 ON hotel');
+        $this->addSql('ALTER TABLE hotel DROP owner_id');
     }
 }

@@ -6,12 +6,11 @@
  * Time: 23:26
  */
 
-namespace App\Service\Home;
+namespace App\Service\HomePage;
 
 
 use App\Hotel\HotelCollection;
 use App\Hotel\HotelMapper;
-use App\Images\ImageMapper;
 use App\Repository\City\CityRepository;
 use App\Repository\Hotel\HotelRepository;
 use App\Repository\ImagesRepository;
@@ -72,12 +71,6 @@ class HomePageService implements HomePageServiceInterface
         $user_ts = strtotime($date_from_user);
 
         return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
-    }
-
-    public function getHotel(string $id)
-    {
-        return $this->hotelRepository->findHotelById($id);
-
     }
 
     public function getMainHotels(): HotelCollection

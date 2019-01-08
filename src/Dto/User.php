@@ -11,16 +11,16 @@ namespace App\Dto;
 
 class User
 {
-    private $name;
+    private $username;
 
-    public function __construct(string $name)
+    public function __construct(string $username)
     {
-        $this->name = $name;
+        $this->username = $username;
     }
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->username;
     }
 
 }

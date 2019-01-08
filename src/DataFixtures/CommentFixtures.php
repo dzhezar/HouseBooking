@@ -11,6 +11,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Comment;
 use App\Entity\Hotel;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -27,13 +28,14 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 100; $i++){
+        for ($i = 0; $i < 500; $i++){
             $comment = new Comment();
 
-            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0,4));
+            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0,99));
+            $author = $this->getReference(User::class . '_' . $faker->numberBetween(0,19));
 
             $comment
-                ->setAuthor($faker->name)
+                ->setAuthor($author)
                 ->setHotel($hotel)
                 ->setText($faker->sentence)
                 ;
