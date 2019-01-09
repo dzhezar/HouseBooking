@@ -9,8 +9,11 @@
 namespace App\Service\HotelPage;
 
 
+use App\Entity\User;
+
 interface HotelPageInterface
 {
     public function getHotel(string $id);
-    public function addComment();
+    public function getUser(string $name);
+    public function setComment(string $id, string $text, User $user);
 }
