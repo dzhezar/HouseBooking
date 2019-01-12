@@ -5,15 +5,13 @@
         <h1 class="mt-4 mb-3">
             {{ city }}
         </h1>
-
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="index.html">Home</a>
             </li>
             <li class="breadcrumb-item active">{{ city }}</li>
         </ol>
-
-{% for hotel in hotels %}
+    {% for hotel in hotels %}
         <div class="row" style="padding-bottom: 10px; border-radius: 15px; border-style: groove; padding-top: 10px; margin-bottom: 10px">
             <div class="col-md-7">
                 <a href="#">
@@ -30,10 +28,6 @@
                 </a>
             </div>
         </div>
-{% endfor %}
-
-
-
+    {% endfor %}
     </div>
-
 {% endblock %}

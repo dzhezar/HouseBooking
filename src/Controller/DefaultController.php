@@ -9,9 +9,6 @@
 namespace App\Controller;
 
 
-use App\Entity\Comment;
-use App\Entity\Images;
-use App\Form\CommentForm;
 use App\Form\HomeForm;
 use App\Service\HomePage\HomePageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

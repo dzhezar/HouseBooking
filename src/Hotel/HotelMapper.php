@@ -12,6 +12,7 @@ namespace App\Hotel;
 use App\BusyDays\BusyDaysCollection;
 use App\BusyDays\BusyDaysMapper;
 use App\Category\CategoryMapper;
+use App\City\CityMapper;
 use App\Comment\CommentsCollection;
 use App\Comment\CommentsMapper;
 use App\Dto\Hotel as HotelDto;
@@ -26,6 +27,7 @@ class HotelMapper
     {
         $categoryMapper = new CategoryMapper();
         $userMapper = new UserMapper();
+        $cityMapper = new CityMapper();
 
         $commentsCollection = new CommentsCollection();
         $commentsMapper = new CommentsMapper();
@@ -57,7 +59,8 @@ class HotelMapper
             $busyDaysCollection,
             $entity->getDescription(),
             $entity->getPrice(),
-            $imagesCollection
+            $imagesCollection,
+            $cityMapper->entityToDto($entity->getCity())
         );
     }
 }

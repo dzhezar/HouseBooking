@@ -3,15 +3,15 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/modern-business.css" rel="stylesheet">
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        {% block stylesheets %}
 
+        {% block stylesheets %}
+            <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+            <link href="/css/modern-business.css" rel="stylesheet">
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         {% endblock %}
     </head>
     <body>
@@ -27,9 +27,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('register') }}">Register</a>
                         </li>
+                        {% if is_granted('ROLE_USER') -%}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('login') }}">Login</a>
+                            <a class="nav-link" href="{{ path('logout') }}">Logout</a>
                         </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                        </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="contact.html">Contact</a>
                         </li>

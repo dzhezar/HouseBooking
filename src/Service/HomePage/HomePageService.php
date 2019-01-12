@@ -14,6 +14,7 @@ use App\Hotel\HotelMapper;
 use App\Repository\City\CityRepository;
 use App\Repository\Hotel\HotelRepository;
 use App\Repository\ImagesRepository;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class HomePageService implements HomePageServiceInterface
 {
@@ -38,6 +39,10 @@ class HomePageService implements HomePageServiceInterface
 
         $begin = $form['StartDate'];
         $end = $form['EndDate'];
+
+        $session = new Session();
+        $session->set('startDate',$begin);
+        $session->set('endDate',$end);
 
 
         $hotels = $this->hotelRepository->findFreeHotels($form['City']);
@@ -77,11 +82,11 @@ class HomePageService implements HomePageServiceInterface
     {
         $mainHotels = $this->hotelRepository->findNumberOfHotels(4);
         $dataMapper = new HotelMapper();
-        $collention = new HotelCollection();
+        $collection = new HotelCollection();
 
         foreach ($mainHotels as $mainHotel){
-            $collention->addHotel($dataMapper->entityToDto($mainHotel));
+            $collection->addHotel($dataMapper->entityToDto($mainHotel));
         }
-    return $collention;
+    return $collection;
     }
 }

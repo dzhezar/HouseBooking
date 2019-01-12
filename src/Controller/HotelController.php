@@ -15,6 +15,7 @@ use App\Form\CommentForm;
 use App\Service\HotelPage\HotelPageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HotelController extends AbstractController
@@ -36,7 +37,6 @@ class HotelController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['hotel' => $id]);
 
             return $this->redirect($request->getUri());
         }
