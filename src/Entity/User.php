@@ -52,6 +52,7 @@ class User implements UserInterface
      */
     private $email;
 
+<<<<<<< HEAD
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BusyDays", mappedBy="user")
      */
@@ -62,6 +63,8 @@ class User implements UserInterface
         $this->busyDays = new ArrayCollection();
     }
 
+=======
+>>>>>>> origin/master
     public function getId(): ?int
     {
         return $this->id;
@@ -170,6 +173,7 @@ class User implements UserInterface
 
         return $this;
     }
+<<<<<<< HEAD
 
     /**
      * @return Collection|BusyDays[]
@@ -201,4 +205,6 @@ class User implements UserInterface
 
         return $this;
     }
+=======
+>>>>>>> origin/master
 }

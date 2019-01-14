@@ -33,7 +33,16 @@ class HotelController extends AbstractController
         $user = $service->getUser($lastUsername);
 
         if ($form->isSubmitted() && $form->isValid()){
+<<<<<<< HEAD
             $service->setComment($id, $form->getData()['Text'],$user);
+=======
+            $comment = $service->setComment($id, $form->getData()['Text'],$user);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+>>>>>>> origin/master
 
             return $this->redirect($request->getUri());
         }

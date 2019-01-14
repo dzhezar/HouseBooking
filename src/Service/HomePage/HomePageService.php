@@ -46,6 +46,10 @@ class HomePageService implements HomePageServiceInterface
         $session->set('endDate', $end);
         $session->set('guests', $guests);
 
+        $session = new Session();
+        $session->set('startDate',$begin);
+        $session->set('endDate',$end);
+
 
         $hotels = $this->hotelRepository->findFreeHotels($form['City']);
         $collection = new HotelCollection();
