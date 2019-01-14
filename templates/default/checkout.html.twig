@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <script src ="js/dataPicker.js"></script>
+{% endblock %}
+{% block body %}
+    <div class="container" style="padding-top: 50px; padding-bottom: 430px">
+        <h1>Checkout</h1>
+        <h4>Hotel: {{ hotel.name }}</h4>
+            <div class="col-6">
+            {{ form_start(form) }}
+                {{ form_row(form.FirstName,
+                    { attr:
+                        {class: 'form-control',
+                         value:  user.firstName }})}}
+                {{ form_row(form.Surname,
+                    { attr:
+                        {class: 'form-control',
+                            value:  user.surname }})}}
+                {{ form_row(form.Email,
+                    { attr:
+                        {class: 'form-control',
+                            value:  user.email }})}}
+                {{ form_row(form.StartDate,
+                    { attr:
+                        {class: 'form-control',
+                            value:  startDate }})}}
+                {{ form_row(form.EndDate,
+                    { attr:
+                        {class: 'form-control',
+                            value:  endDate }})}}
+                {{ form_row(form.Guests,
+                    { attr:
+                        {class: 'form-control',
+                            value:  guests }})}}
+                <button type="submit" class="btn btn-primary">Checkout</button>
+            {{ form_end(form) }}
+            </div>
+    </div>
+{% endblock %}

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +36,31 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $surname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BusyDays", mappedBy="user")
+     */
+    private $busyDays;
+
+    public function __construct()
+    {
+        $this->busyDays = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -106,5 +133,72 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(string $surname): self
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BusyDays[]
+     */
+    public function getBusyDays(): Collection
+    {
+        return $this->busyDays;
+    }
+
+    public function addBusyDay(BusyDays $busyDay): self
+    {
+        if (!$this->busyDays->contains($busyDay)) {
+            $this->busyDays[] = $busyDay;
+            $busyDay->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBusyDay(BusyDays $busyDay): self
+    {
+        if ($this->busyDays->contains($busyDay)) {
+            $this->busyDays->removeElement($busyDay);
+            // set the owning side to null (unless already changed)
+            if ($busyDay->getUser() === $this) {
+                $busyDay->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

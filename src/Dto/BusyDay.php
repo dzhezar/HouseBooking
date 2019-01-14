@@ -13,12 +13,14 @@ class BusyDay
 {
     private $hotel;
     private $date;
+    private $user;
 
 
-    public function __construct(\DateTimeInterface $date, Hotel $hotel = null)
+    public function __construct(\DateTimeInterface $date, Hotel $hotel = null, User $user = null)
     {
         $this->hotel = $hotel;
         $this->date = $date;
+        $this->user = $user;
     }
 
     public function getHotel(): Hotel
@@ -30,5 +32,11 @@ class BusyDay
     {
         return $this->date;
     }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
 
 }

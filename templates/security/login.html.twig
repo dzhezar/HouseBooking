@@ -2,7 +2,7 @@
 
 {% block title %}Log in!{% endblock %}
 {% block body %}
-
+<div class="col-4">
 <form method="post" style="padding-top: 50px">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -18,9 +18,9 @@
            value="{{ csrf_token('authenticate') }}"
     >
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
+    <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
+    <a href="{{ path('register') }}">Register</a>
 </form>
+</div>
 {% endblock %}
 

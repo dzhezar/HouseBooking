@@ -1,0 +1,8 @@
+<h3>Somebody have booked your hotel!</h3>
+
+<h4>Hi {{ hotel.owner.firstName }} {{ hotel.owner.surname }}! Somebody have booked a {{ hotel.name }} for a {{ nights }} nights for {{ guests }} guests on {{ hotel.address }}</h4>
+<h4>Booking is starting from {{ startDate }} and will continue until {{ endDate }}.</h4>
+
+<h4>The price, user should pay to you is {{ nights * hotel.price  }}$.</h4>
+
+<h4>Have a nice day!</h4>

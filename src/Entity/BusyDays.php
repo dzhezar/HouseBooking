@@ -27,6 +27,12 @@ class BusyDays
      */
     private $hotel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="busyDays")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +58,18 @@ class BusyDays
     public function setHotel(?Hotel $hotel): self
     {
         $this->hotel = $hotel;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

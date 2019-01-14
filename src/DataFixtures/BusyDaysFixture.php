@@ -11,6 +11,7 @@ namespace App\DataFixtures;
 
 use App\Entity\BusyDays;
 use App\Entity\Hotel;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -31,10 +32,12 @@ class BusyDaysFixture extends Fixture implements DependentFixtureInterface
             $busyDay = new BusyDays();
 
             $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,4));
+            $user = $this->getReference(User::class.'_'.$faker->numberBetween(0,19));
 
             $busyDay
                 ->setHotel($hotel)
                 ->setDate($faker->dateTimeThisDecade)
+                ->setUser($user)
             ;
             $manager->persist($busyDay);
         }

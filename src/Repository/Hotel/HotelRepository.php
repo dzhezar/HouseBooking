@@ -71,6 +71,31 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
             ;
     }
 
+    public function findBookedHotelsByUser(int $id)
+    {
+        return $this->createQueryBuilder('h')
+            ->leftJoin('App\Entity\BusyDays','b',
+                \Doctrine\ORM\Query\Expr\Join::WITH, 'h.id = b.hotel')
+            ->where('b.user = :user')
+            ->setParameter('user',$id)
+            ->distinct()
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findOwnedHotelsByUser(int $id)
+    {
+        return $this->createQueryBuilder('h')
+            ->innerJoin('h.owner','o')
+            ->where('o.id = :owner')
+            ->setParameter('owner',$id)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
 //    public function findAllHotelsWithBusyDays()
 //    {
 //        $conn = $this->getEntityManager()->getConnection();
@@ -85,5 +110,6 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
 //        $stmt->execute();
 //        return $stmt->fetchAll();
 //    }
+
 
 }

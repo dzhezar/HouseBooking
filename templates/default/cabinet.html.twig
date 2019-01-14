@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container-fluid" style="padding-top: 50px; padding-bottom: 50px; width: 85% ">
+        <h3>Booked Hotels</h3>
+        <div class="row" style="padding-top: 20px">
+            {% for hotel in bookedHotels %}
+                <div class="col-lg-3 col-sm-6 portfolio-item">
+                    <div class="card h-100">
+                        <a href="{{ path('hotel',{'id': hotel.id }) }}"><img class="card-img-top" src="{{ hotel.images.shift.image }}" alt=""></a>
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <a href="{{ path('hotel',{'id': hotel.id }) }}">{{ hotel.name }}</a>
+                            </h4>
+                            <h5>{{ hotel.city.name }}</h5>
+                            <p class="card-text">
+                            <ul>
+                                <li>{{ hotel.address }}</li>
+                                <li>{{ hotel.price }} $/night</li>
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
