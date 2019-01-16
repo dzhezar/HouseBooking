@@ -71,6 +71,16 @@ class Hotel
      */
     private $owner;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $coordinates;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $capacity;
+
 
     public function __construct()
     {
@@ -257,6 +267,30 @@ class Hotel
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getCoordinates(): ?string
+    {
+        return $this->coordinates;
+    }
+
+    public function setCoordinates(string $coordinates): self
+    {
+        $this->coordinates = $coordinates;
+
+        return $this;
+    }
+
+    public function getCapacity(): ?int
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(int $capacity): self
+    {
+        $this->capacity = $capacity;
 
         return $this;
     }

@@ -19,5 +19,6 @@ interface HotelPageInterface
     public function getUser(string $name);
     public function setComment(string $id, string $text, User $user): Comment;
     public function setCheckoutDays(string $id, array $form, User $user): int ;
+    public function setHotel(array $form): Hotel;
 
 }

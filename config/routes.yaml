@@ -15,13 +15,13 @@ app_login:
     controller: App\Controller\SecurityController::login
 logout:
     path: /logout
-<<<<<<< HEAD
 checkout:
     path: /checkout/{id}
     controller: App\Controller\HotelController::checkoutHotel
 cabinet:
     path: /cabinet
     controller: App\Controller\DefaultController::showCabinet
-=======
->>>>>>> origin/master
+addHotel:
+    path: /addHotel
+    controller: App\Controller\HotelController::addHotel
 

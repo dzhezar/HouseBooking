@@ -3,19 +3,19 @@
     <div class="container-fluid" style="padding-top: 50px; padding-bottom: 50px; width: 85% ">
         <h3>Booked Hotels</h3>
         <div class="row" style="padding-top: 20px">
-            {% for hotel in bookedHotels %}
+            {% for bookedHotel in bookedHotels %}
                 <div class="col-lg-3 col-sm-6 portfolio-item">
                     <div class="card h-100">
-                        <a href="{{ path('hotel',{'id': hotel.id }) }}"><img class="card-img-top" src="{{ hotel.images.shift.image }}" alt=""></a>
+                        <a href="{{ path('hotel',{'id': bookedHotel.id }) }}"><img class="card-img-top" src="{{ bookedHotel.images.shift.image }}" alt=""></a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a href="{{ path('hotel',{'id': hotel.id }) }}">{{ hotel.name }}</a>
+                                <a href="{{ path('hotel',{'id': bookedHotel.id }) }}">{{ bookedHotel.name }}</a>
                             </h4>
-                            <h5>{{ hotel.city.name }}</h5>
+                            <h5>{{ bookedHotel.city.name }}</h5>
                             <p class="card-text">
                             <ul>
-                                <li>{{ hotel.address }}</li>
-                                <li>{{ hotel.price }} $/night</li>
+                                <li>{{ bookedHotel.address }}</li>
+                                <li>{{ bookedHotel.price }} $/night</li>
                             </ul>
                             </p>
                         </div>
@@ -24,4 +24,33 @@
             {% endfor %}
         </div>
     </div>
+
+    <div class="container-fluid" style="padding-top: 50px; padding-bottom: 50px; width: 85% ">
+    <h3>Owned Hotels</h3>
+    <div class="row" style="padding-top: 20px">
+        {% for ownedHotel in ownedHotels %}
+            <div class="col-lg-3 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                    <a href="{{ path('hotel',{'id': ownedHotel.id }) }}"><img class="card-img-top" style="object-fit:cover; height: 300px; width: 100%; background-color: #c8c8c8 " src="uploads/images/{{ ownedHotel.images.shift.image }}" alt=""></a>
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="{{ path('hotel',{'id': ownedHotel.id }) }}">{{ ownedHotel.name }}</a>
+                        </h4>
+                        <h5>{{ ownedHotel.city.name }}</h5>
+                        <p class="card-text">
+                        <ul>
+                            <li>{{ ownedHotel.address }}</li>
+                            <li>{{ ownedHotel.price }} $/night</li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+        <a class="btn btn-primary" style="width: 200px; height: 100px; text-align: center; line-height: 80px; font-size: x-large" href="{{ path('addHotel') }}">Add Hotel
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+
 {% endblock %}

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\Category\CategoryRepository")
  */
 class Category
 {
@@ -28,8 +28,9 @@ class Category
      */
     private $hotels;
 
-    public function __construct()
+    public function __construct(string $name)
     {
+        $this->name = $name;
         $this->hotels = new ArrayCollection();
     }
 

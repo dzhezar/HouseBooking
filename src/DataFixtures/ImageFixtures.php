@@ -23,9 +23,9 @@ class ImageFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = Factory::create();
 
-        for ($i = 0; $i < 2000; $i++){
+        for ($i = 0; $i < 400; $i++){
             $image = new Images();
-            $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,99));
+            $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,49));
 
             $image
                 ->setHotel($hotel)

@@ -13,7 +13,7 @@ interface HotelRepositoryInterface
 {
     public function findAllWithCategories();
     public function findAllByCategory(string $category);
-    public function findFreeHotels(string $city);
+    public function findFreeHotels(string $city, int $guests);
     public function findHotelById(string $id);
     public function findNumberOfHotels(int $count);
     public function findBookedHotelsByUser(int $id);

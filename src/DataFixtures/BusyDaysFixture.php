@@ -28,10 +28,10 @@ class BusyDaysFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 100; $i++){
+        for ($i = 0; $i < 400; $i++){
             $busyDay = new BusyDays();
 
-            $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,4));
+            $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,49));
             $user = $this->getReference(User::class.'_'.$faker->numberBetween(0,19));
 
             $busyDay

@@ -52,7 +52,7 @@ class User implements UserInterface
      */
     private $email;
 
-<<<<<<< HEAD
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BusyDays", mappedBy="user")
      */
@@ -63,8 +63,6 @@ class User implements UserInterface
         $this->busyDays = new ArrayCollection();
     }
 
-=======
->>>>>>> origin/master
     public function getId(): ?int
     {
         return $this->id;
@@ -77,7 +75,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -111,7 +109,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -173,7 +171,6 @@ class User implements UserInterface
 
         return $this;
     }
-<<<<<<< HEAD
 
     /**
      * @return Collection|BusyDays[]
@@ -205,6 +202,4 @@ class User implements UserInterface
 
         return $this;
     }
-=======
->>>>>>> origin/master
 }

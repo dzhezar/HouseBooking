@@ -65,9 +65,11 @@ class DefaultController extends AbstractController
         $user = $service->getUser($lastUsername);
 
         $bookedHotels = $service->getBookedHotels($user->getId());
+        $ownedHotels = $service->getOwnedHotels($user->getId());
 
         return $this->render('default/cabinet.html.twig',[
-             'bookedHotels' => $bookedHotels
+             'bookedHotels' => $bookedHotels,
+             'ownedHotels' => $ownedHotels,
          ]);
 
     }

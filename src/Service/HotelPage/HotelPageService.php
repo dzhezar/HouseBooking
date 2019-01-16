@@ -10,14 +10,16 @@ namespace App\Service\HotelPage;
 
 
 use App\Entity\BusyDays;
+use App\Entity\City;
 use App\Entity\Comment;
 use App\Entity\Hotel;
+use App\Entity\Images;
 use App\Entity\User;
 use App\Repository\BusyDays\BusyDaysRepository;
 use App\Repository\Hotel\HotelRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HotelPageService implements HotelPageInterface
 {
@@ -25,13 +27,15 @@ class HotelPageService implements HotelPageInterface
     private $userRepository;
     private $busyDaysRepository;
     private $em;
+    private $authenticationUtils;
 
-    public function __construct(HotelRepository $hotelRepository, UserRepository $userRepository, BusyDaysRepository $busyDaysRepository, EntityManagerInterface $em)
+    public function __construct(HotelRepository $hotelRepository, UserRepository $userRepository, BusyDaysRepository $busyDaysRepository, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils)
     {
         $this->hotelRepository = $hotelRepository;
         $this->userRepository = $userRepository;
         $this->busyDaysRepository = $busyDaysRepository;
         $this->em = $em;
+        $this->authenticationUtils = $authenticationUtils;
     }
     public function getHotel(string $id)
     {
@@ -86,4 +90,48 @@ class HotelPageService implements HotelPageInterface
         return $nightsCounter;
     }
 
+    public function setHotel(array $form): Hotel
+    {
+        $lastUsername = $this->authenticationUtils->getLastUsername();
+        $user = $this->getUser($lastUsername);
+        $address = explode(',',$form['pacInput']);
+        $city = $this->em->getRepository(City::class)->findBy(['name' => $address[2]]);
+
+        if (!isset($city)){
+            $city = new City();
+            $city->setName($address[2]);
+            $this->em->persist($city);
+            $this->em->flush();
+        }
+        $hotel = new Hotel();
+        $hotel
+            ->setName($form['name'])
+            ->setCategory($form['category'])
+            ->setCity($city)
+            ->setDescription($form['description'])
+            ->setOwner($user)
+            ->setCapacity($form['capacity'])
+            ->setPrice($form['price'])
+            ->setAddress($form['pacInput'])
+            ->setCoordinates($form['info'])
+            ;
+        $this->em->persist($hotel);
+        $this->em->flush();
+
+
+
+        return $hotel;
+    }
+
+    public function setImage(Hotel $hotel, string $fileName)
+    {
+        $file = new Images();
+        $file
+            ->setHotel($hotel)
+            ->setImage($fileName)
+        ;
+
+        $this->em->persist($file);
+        $this->em->flush();
+    }
 }

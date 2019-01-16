@@ -31,7 +31,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 500; $i++){
             $comment = new Comment();
 
-            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0,99));
+            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0,49));
             $author = $this->getReference(User::class . '_' . $faker->numberBetween(0,19));
 
             $comment

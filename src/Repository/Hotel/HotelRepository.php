@@ -43,7 +43,7 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
             ;
     }
 
-    public function findFreeHotels(string $city)
+    public function findFreeHotels(string $city, int $guests)
     {
         return $this->createQueryBuilder('h')
             ->leftJoin('App\Entity\BusyDays','b',
@@ -51,7 +51,10 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
             ->leftJoin('App\Entity\City','c',
                 \Doctrine\ORM\Query\Expr\Join::WITH, 'h.city = c.id')
             ->where('c.name = :city')
-            ->setParameter('city',$city)
+            ->andWhere('h.capacity >= :guests')
+            ->setParameters(['city' => $city,
+                             'guests' => $guests,
+                            ])
             ->getQuery()
             ->getResult()
             ;

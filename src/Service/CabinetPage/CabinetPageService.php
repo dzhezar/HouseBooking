@@ -42,8 +42,15 @@ class CabinetPageService
         return $collection;
     }
 
-    public function getOwnedHotels(int $id)
+    public function getOwnedHotels(int $id): HotelCollection
     {
+        $ownedHotels = $this->hotelRepository->findOwnedHotelsByUser($id);
+        $collection = new HotelCollection();
+        $dataMapper = new HotelMapper();
 
+        foreach ($ownedHotels as $ownedHotel) {
+            $collection->addHotel($dataMapper->entityToDto($ownedHotel));
+        }
+        return $collection;
     }
 }

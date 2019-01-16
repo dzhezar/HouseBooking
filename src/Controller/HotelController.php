@@ -11,11 +11,14 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Images;
+use App\Form\AddHotelForm;
 use App\Form\CheckoutForm;
 use App\Form\CommentForm;
 use App\Service\HotelPage\HotelPageInterface;
 use App\Service\HotelPage\HotelPageService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -33,16 +36,8 @@ class HotelController extends AbstractController
         $user = $service->getUser($lastUsername);
 
         if ($form->isSubmitted() && $form->isValid()){
-<<<<<<< HEAD
+
             $service->setComment($id, $form->getData()['Text'],$user);
-=======
-            $comment = $service->setComment($id, $form->getData()['Text'],$user);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
->>>>>>> origin/master
 
             return $this->redirect($request->getUri());
         }
@@ -117,5 +112,36 @@ class HotelController extends AbstractController
             'endDate' => $endDate,
             'guests' => $guests
         ]);
+    }
+
+    public function addHotel(HotelPageService $service,Request $request, EntityManagerInterface $manager)
+    {
+        $form = $this->createForm(AddHotelForm::class);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()){
+            $hotel = $service->setHotel($form->getData());
+            foreach ($form->getData()['images'] as $image){
+                $fileName = md5(uniqid()).'.'.$image->guessExtension();
+                $service->setImage($hotel,$fileName);
+
+                try {
+                    $image->move(
+                        $this->getParameter('images_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+
+                }
+
+            }
+            return $this->redirectToRoute('cabinet');
+        }
+
+        return $this->render('default/addHotel.html.twig',[
+            'form' => $form->createView(),
+        ]);
+
     }
 }
