@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
-    <script src ="js/dataPicker.js"></script>
+    <script src ="/js/dataPicker.js"></script>
 {% endblock %}
 {% block body %}
     <div class="container" style="padding-top: 50px; padding-bottom: 430px">
@@ -33,7 +33,8 @@
                     { attr:
                         {class: 'form-control',
                             value:  guests }})}}
-                <button type="submit" class="btn btn-primary">Checkout</button>
+                <p style="margin-top: 10px"><b>Check your information below</b></p>
+                <button type="submit"  class="btn btn-primary">Checkout</button>
             {{ form_end(form) }}
             </div>
     </div>

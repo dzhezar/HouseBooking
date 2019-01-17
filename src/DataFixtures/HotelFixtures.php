@@ -31,7 +31,7 @@ class HotelFixtures extends Fixture implements DependentFixtureInterface
 
         $faker = Factory::create();
 
-        for ($i = 0; $i < 50; $i++){
+        for ($i = 0; $i < 1000; $i++){
             $hotel = new Hotel();
             $category = $this->getReference(Category::class.'_'.$faker->numberBetween(0,2));
             $owner = $this->getReference(User::class.'_'.$faker->numberBetween(0,19));

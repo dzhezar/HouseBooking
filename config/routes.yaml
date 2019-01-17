@@ -7,6 +7,9 @@ search:
 hotel:
     path: /hotel/{id}
     controller: App\Controller\HotelController::showHotel
+searchresult:
+    path: /searchresult
+    controller: App\Controller\DefaultController::showSearchResult
 register:
     path: /register
     controller: App\Controller\RefistrationController::register
@@ -24,4 +27,7 @@ cabinet:
 addHotel:
     path: /addHotel
     controller: App\Controller\HotelController::addHotel
+deleteHotel:
+    path: /deleteHotel/{id}
+    controller: App\Controller\HotelController::deleteHotel
 

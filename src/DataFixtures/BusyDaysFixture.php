@@ -28,10 +28,10 @@ class BusyDaysFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 400; $i++){
+        for ($i = 0; $i < 5000; $i++){
             $busyDay = new BusyDays();
 
-            $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,49));
+            $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,999));
             $user = $this->getReference(User::class.'_'.$faker->numberBetween(0,19));
 
             $busyDay
@@ -44,12 +44,6 @@ class BusyDaysFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    /**
-     * This method must return an array of fixtures classes
-     * on which the implementing class depends on
-     *
-     * @return array
-     */
     public function getDependencies()
     {
         return array(

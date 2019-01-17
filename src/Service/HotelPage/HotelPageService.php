@@ -95,11 +95,12 @@ class HotelPageService implements HotelPageInterface
         $lastUsername = $this->authenticationUtils->getLastUsername();
         $user = $this->getUser($lastUsername);
         $address = explode(',',$form['pacInput']);
-        $city = $this->em->getRepository(City::class)->findBy(['name' => $address[2]]);
+        $city = $this->em->getRepository(City::class)->findOneBy(['name' => ltrim($address[2])]);
 
-        if (!isset($city)){
+
+        if (empty($city)){
             $city = new City();
-            $city->setName($address[2]);
+            $city->setName(ltrim($address[2]));
             $this->em->persist($city);
             $this->em->flush();
         }
@@ -128,10 +129,42 @@ class HotelPageService implements HotelPageInterface
         $file = new Images();
         $file
             ->setHotel($hotel)
-            ->setImage($fileName)
+            ->setImage('/uploads/images/'.$fileName)
         ;
 
         $this->em->persist($file);
+        $this->em->flush();
+    }
+
+    public function deleteHotel(Hotel $hotel, $publicDir)
+    {
+        $city = $hotel->getCity();
+        $hotelsInSameCity = $this->em->getRepository(Hotel::class)->findBy(['city' => $city]);
+
+        $images = $this->em->getRepository(Images::class)->findBy(['hotel' => $hotel]);
+        foreach ($images as $image){
+            unlink($publicDir.$image->getImage());
+            $this->em->remove($image);
+        }
+        $this->em->flush();
+
+        $comments = $this->em->getRepository(Comment::class)->findBy(['hotel' => $hotel]);
+        foreach ($comments as $comment) {
+            $this->em->remove($comment);
+        }
+        $this->em->flush();
+
+        $busyDays = $this->em->getRepository(BusyDays::class)->findBy(['hotel' => $hotel]);
+        foreach ($busyDays as $busyDay) {
+            $this->em->remove($busyDay);
+        }
+        $this->em->flush();
+
+        $this->em->remove($hotel);
+
+        if (count($hotelsInSameCity) == 1){
+            $this->em->remove($city);
+        }
         $this->em->flush();
     }
 }

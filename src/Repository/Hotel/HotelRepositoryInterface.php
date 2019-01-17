@@ -18,4 +18,5 @@ interface HotelRepositoryInterface
     public function findNumberOfHotels(int $count);
     public function findBookedHotelsByUser(int $id);
     public function findOwnedHotelsByUser(int $id);
+    public function filterHotels(array $data, int $cityId);
 }

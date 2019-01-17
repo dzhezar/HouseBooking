@@ -9,13 +9,13 @@
             <div class="col-6">
                     {{ form_start(registrationForm) }}
                     {{ form_row(registrationForm.username,
-                        {'attr': {'class': 'form-control', 'placeholder' : 'Zhecond'}}) }}
+                        {'attr': {'class': 'form-control'}}) }}
                     {{ form_row(registrationForm.firstName,
-                        {'attr': {'class': 'form-control', 'placeholder' : 'Eugene'}}) }}
+                        {'attr': {'class': 'form-control'}}) }}
                     {{ form_row(registrationForm.surname,
-                        {'attr': {'class': 'form-control', 'placeholder' : 'Popov'}}) }}
+                        {'attr': {'class': 'form-control' }}) }}
                     {{ form_row(registrationForm.email,
-                        {'attr': {'class': 'form-control', 'placeholder' : 'zhecond@vafel.com'}}) }}
+                        {'attr': {'class': 'form-control'}}) }}
                     {{ form_row(registrationForm.plainPassword.first,
                         {'attr': {'class': 'form-control', 'placeholder' : 'Minimum 6 characters'}}) }}
                     {{ form_row(registrationForm.plainPassword.second,

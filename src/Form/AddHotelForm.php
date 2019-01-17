@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -43,7 +44,7 @@ class AddHotelForm extends AbstractType
             ->add('description',TextareaType::class)
             ->add('price',IntegerType::class)
             ->add('pacInput',TextType::class)
-            ->add('info',TextType::class)
+            ->add('info',HiddenType::class)
             ->add('images',FileType::class, [
                 'label' => 'Images',
                 'multiple' => true

@@ -28,10 +28,10 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 500; $i++){
+        for ($i = 0; $i < 5000; $i++){
             $comment = new Comment();
 
-            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0,49));
+            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0,999));
             $author = $this->getReference(User::class . '_' . $faker->numberBetween(0,19));
 
             $comment

@@ -142,6 +142,14 @@ class HotelController extends AbstractController
         return $this->render('default/addHotel.html.twig',[
             'form' => $form->createView(),
         ]);
+    }
 
+    public function deleteHotel(string $id, HotelPageService $service)
+    {
+
+        $publicDir = $this->getParameter('public_directory');
+        $hotel = $service->getHotel($id);
+        $service->deleteHotel($hotel, $publicDir);
+        return $this->redirectToRoute('cabinet');
     }
 }

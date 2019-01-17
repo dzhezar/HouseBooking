@@ -98,6 +98,45 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
             ;
     }
 
+    public function filterHotels(array $data, int $cityId)
+    {
+        $sql = "SELECT h FROM App\Entity\Hotel h
+                WHERE h.city = '$cityId' AND ";
+
+        if(!empty($data['category']->first())){
+            $categories = '';
+            foreach ($data['category'] as $category) {
+                $name = $category->getId();
+                $categories .= "'$name',";
+            }
+            $categories =rtrim($categories, ',');
+            $sql .= "h.category IN ($categories)";
+            $found = true;
+        }
+
+        if(!empty($data['priceMin'])){
+            $min = $data['priceMin'];
+            $max = $data['priceMax'];
+            if (isset($found)){
+                $sql .= " AND ";
+            }
+            $sql .= "h.price BETWEEN $min AND $max";
+            $found =true;
+        }
+        if(!empty($data['capacityMin'])){
+            $min = $data['capacityMin'];
+            $max = $data['capacityMax'];
+            if (isset($found)){
+                $sql .= " AND ";
+            }
+            $sql .= "h.capacity BETWEEN $min AND $max";
+        }
+        $em = $this->getEntityManager();
+        $query = $em->createQuery($sql);
+
+        return $query->getResult();
+
+    }
 
 //    public function findAllHotelsWithBusyDays()
 //    {

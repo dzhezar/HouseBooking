@@ -9,6 +9,7 @@
 namespace App\Form;
 
 
+use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -22,13 +23,20 @@ class HomeForm extends AbstractType
         $builder
             ->add('City',TextType::class)
             ->add('StartDate',HiddenType::class,[
-                'data' => '2018-01-01'
+                'data' => $this->getDates()['start']
             ])
             ->add('EndDate',HiddenType::class,[
-                'data' => '2018-01-15'
+                'data' => $this->getDates()['end']
             ])
             ->add('Guests',IntegerType::class)
             ;
+    }
+    private function getDates()
+    {
+        $dates['start'] = date('Y-m-d');
+        $date =  new DateTime();
+        $dates['end'] = $date->modify('+1 week')->format('Y-m-d');
+        return $dates;
     }
 
 }

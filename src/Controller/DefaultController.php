@@ -9,12 +9,14 @@
 namespace App\Controller;
 
 
+use App\Form\FilterForm;
 use App\Form\HomeForm;
 use App\Service\CabinetPage\CabinetPageService;
 use App\Service\HomePage\HomePageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class DefaultController extends AbstractController
@@ -27,13 +29,8 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $searchResult = $service->searchHotels($form->getData());
-            $city = $form->getData()['City'];
-
-            return $this->render('default/searchResult.html.twig',[
-                'hotels' => $searchResult,
-                'city' => $city
-            ]);
+            $service->handleForm($form->getData());
+            return $this->redirectToRoute('searchresult');
         }
 
         return $this->render('default/index.html.twig',[
@@ -41,6 +38,30 @@ class DefaultController extends AbstractController
             'mainHotels' => $mainHotels
         ]);
     }
+
+    public function showSearchResult(Request $request, HomePageServiceInterface $service)
+    {
+        $session = new Session();
+        $city = $session->get('city');
+
+        $filterForm = $this->createForm(FilterForm::class);
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted()){
+            $searchResult = $service->searchByFilter($filterForm->getData());
+        }
+        else{
+            $searchResult = $service->searchHotels($service->getData());
+        }
+
+        return $this->render('default/searchResult.html.twig',[
+            'form' =>$filterForm->createView(),
+            'hotels' => $searchResult,
+            'city' => $city,
+        ]);
+
+    }
+
 
     public function search(Request $request, HomePageServiceInterface $service)
     {
@@ -52,12 +73,7 @@ class DefaultController extends AbstractController
             'cities' =>$result
         ]);
     }
-    public function searchResult($hotels)
-    {
-        return $this->render('default/searchResult.html.twig',[
-            'hotels' => $hotels
-        ]);
-    }
+
 
     public function showCabinet(CabinetPageService $service, AuthenticationUtils $authenticationUtils)
     {

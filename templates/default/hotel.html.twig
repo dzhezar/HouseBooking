@@ -11,7 +11,7 @@
                 <div class="carousel-inner">
                     {% for image in images %}
                         <div {% if loop.index0 == 0 %} class="carousel-item active" {% else %} class="carousel-item" {% endif %}>
-                            <img class="id-block w-100" style="object-fit:cover; height: 400px; width: 100%; background-color: #c8c8c8 " src="/uploads/images/{{ image.image}}" alt="{{ image.image}}" />
+                            <img class="id-block w-100" style="object-fit:cover; height: 400px; width: 100%; background-color: #c8c8c8 " src="{{ image.image}}" alt="{{ image.image}}" />
                         </div>
                     {% endfor %}
                 </div>
@@ -41,11 +41,13 @@
                 {% endif %}
             </div>
         </div>
+        <div class="col-6">
         <div id="floating-panel">
             <input id="latlng" type="hidden" value="{{ hotel.coordinates }}">
             <input id="submit" type="hidden" value="Show Hotel On Map">
         </div>
         <div id="map"></div>
+        </div>
 
 
 
@@ -57,7 +59,7 @@
                 {{ form_start(form) }}
                     {{ form_widget(form.Text,
                         {'attr': {'class': "form-control", 'rows': '3' }}) }}
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" style="padding-top: 10px" class="btn btn-primary">Submit</button>
                 {{ form_end(form) }}
             </div>
         </div>

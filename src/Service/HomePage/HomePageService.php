@@ -14,6 +14,7 @@ use App\Hotel\HotelMapper;
 use App\Repository\City\CityRepository;
 use App\Repository\Hotel\HotelRepository;
 use App\Repository\ImagesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class HomePageService implements HomePageServiceInterface
@@ -21,12 +22,14 @@ class HomePageService implements HomePageServiceInterface
     private $hotelRepository;
     private $cityRepository;
     private $imageRepository;
+    private $em;
 
-    public function __construct(HotelRepository $hotelRepository, CityRepository $cityRepository, ImagesRepository $imageRepository)
+    public function __construct(HotelRepository $hotelRepository, CityRepository $cityRepository, ImagesRepository $imageRepository,EntityManagerInterface $em)
     {
         $this->hotelRepository = $hotelRepository;
         $this->cityRepository = $cityRepository;
         $this->imageRepository =$imageRepository;
+        $this->em = $em;
     }
 
     public function ajaxSearch(string $text)
@@ -36,20 +39,8 @@ class HomePageService implements HomePageServiceInterface
     }
     public function searchHotels(array $form)
     {
-
         $begin = $form['StartDate'];
         $end = $form['EndDate'];
-        $guests = $form['Guests'];
-
-        $session = new Session();
-        $session->set('startDate', $begin);
-        $session->set('endDate', $end);
-        $session->set('guests', $guests);
-
-        $session = new Session();
-        $session->set('startDate',$begin);
-        $session->set('endDate',$end);
-
 
         $hotels = $this->hotelRepository->findFreeHotels($form['City'],$form['Guests']);
         $collection = new HotelCollection();
@@ -94,5 +85,43 @@ class HomePageService implements HomePageServiceInterface
             $collection->addHotel($dataMapper->entityToDto($mainHotel));
         }
     return $collection;
+    }
+
+    public function handleForm(array $form)
+    {
+        $begin = $form['StartDate'];
+        $end = $form['EndDate'];
+        $guests = $form['Guests'];
+        $city = $form['City'];
+
+        $session = new Session();
+        $session->set('startDate', $begin);
+        $session->set('endDate', $end);
+        $session->set('guests', $guests);
+        $session->set('city', $city);
+    }
+    public function getData(): array
+    {
+        $session = new Session();
+        $data['StartDate'] = $session->get('startDate');
+        $data['EndDate'] = $session->get('endDate');
+        $data['Guests'] = $session->get('guests');
+        $data['City'] = $session->get('city');
+
+        return $data;
+    }
+    public function searchByFilter($data)
+    {
+        $session = new Session();
+        $city = $this->cityRepository->findOneBy(['name' => $session->get('city')]);
+        $cityId = $city->getId();
+
+        $result = $this->hotelRepository->filterHotels($data, $cityId);
+        $collection = new HotelCollection();
+        $dataMapper = new HotelMapper();
+        foreach ($result as $value){
+            $collection->addHotel($dataMapper->entityToDto($value));
+        }
+        return $collection;
     }
 }
