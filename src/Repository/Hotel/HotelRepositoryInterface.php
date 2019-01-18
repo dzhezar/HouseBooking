@@ -9,6 +9,8 @@
 namespace App\Repository\Hotel;
 
 
+use App\Hotel\HotelFilter;
+
 interface HotelRepositoryInterface
 {
     public function findAllWithCategories();
@@ -18,5 +20,5 @@ interface HotelRepositoryInterface
     public function findNumberOfHotels(int $count);
     public function findBookedHotelsByUser(int $id);
     public function findOwnedHotelsByUser(int $id);
-    public function filterHotels(array $data, int $cityId);
+    public function filterHotels(HotelFilter $filter, int $cityId);
 }

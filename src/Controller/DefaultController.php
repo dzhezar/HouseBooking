@@ -16,7 +16,6 @@ use App\Service\HomePage\HomePageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class DefaultController extends AbstractController
@@ -41,23 +40,27 @@ class DefaultController extends AbstractController
 
     public function showSearchResult(Request $request, HomePageServiceInterface $service)
     {
-        $session = new Session();
-        $city = $session->get('city');
+
+
+        $data['StartDate'] = $this->get('session')->get('startDate');
+        $data['EndDate'] = $this->get('session')->get('endDate');
+        $data['Guests'] = $this->get('session')->get('guests');
+        $data['City'] = $this->get('session')->get('city');
 
         $filterForm = $this->createForm(FilterForm::class);
         $filterForm->handleRequest($request);
 
         if ($filterForm->isSubmitted()){
-            $searchResult = $service->searchByFilter($filterForm->getData());
+            $searchResult = $service->searchByFilter($filterForm->getData(),$data['City']);
         }
         else{
-            $searchResult = $service->searchHotels($service->getData());
+            $searchResult = $service->searchHotels($data);
         }
 
         return $this->render('default/searchResult.html.twig',[
             'form' =>$filterForm->createView(),
             'hotels' => $searchResult,
-            'city' => $city,
+            'city' => $data['City'],
         ]);
 
     }

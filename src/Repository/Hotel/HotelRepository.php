@@ -2,8 +2,12 @@
 
 namespace App\Repository\Hotel;
 
+use App\Entity\Category;
 use App\Entity\Hotel;
+use App\Hotel\HotelFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Connection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -24,40 +28,37 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
     public function findAllWithCategories()
     {
         return $this->createQueryBuilder('h')
-            ->innerJoin('h.category','c')
+            ->innerJoin('h.category', 'c')
             ->addSelect('c')
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findAllByCategory(string $category)
     {
         return $this->createQueryBuilder('h')
-            ->innerJoin('h.category','c')
+            ->innerJoin('h.category', 'c')
             ->addSelect('c')
             ->andWhere('c.name = :category')
-            ->setParameter('category',$category)
+            ->setParameter('category', $category)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findFreeHotels(string $city, int $guests)
     {
         return $this->createQueryBuilder('h')
-            ->leftJoin('App\Entity\BusyDays','b',
+            ->leftJoin('App\Entity\BusyDays', 'b',
                 \Doctrine\ORM\Query\Expr\Join::WITH, 'h.id = b.hotel')
-            ->leftJoin('App\Entity\City','c',
+            ->leftJoin('App\Entity\City', 'c',
                 \Doctrine\ORM\Query\Expr\Join::WITH, 'h.city = c.id')
             ->where('c.name = :city')
             ->andWhere('h.capacity >= :guests')
             ->setParameters(['city' => $city,
-                             'guests' => $guests,
-                            ])
+                'guests' => $guests,
+            ])
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findHotelById(string $id)
@@ -70,73 +71,56 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
         return $this->createQueryBuilder('h')
             ->setMaxResults($count)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findBookedHotelsByUser(int $id)
     {
         return $this->createQueryBuilder('h')
-            ->leftJoin('App\Entity\BusyDays','b',
+            ->leftJoin('App\Entity\BusyDays', 'b',
                 \Doctrine\ORM\Query\Expr\Join::WITH, 'h.id = b.hotel')
             ->where('b.user = :user')
-            ->setParameter('user',$id)
+            ->setParameter('user', $id)
             ->distinct()
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     public function findOwnedHotelsByUser(int $id)
     {
         return $this->createQueryBuilder('h')
-            ->innerJoin('h.owner','o')
+            ->innerJoin('h.owner', 'o')
             ->where('o.id = :owner')
-            ->setParameter('owner',$id)
+            ->setParameter('owner', $id)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
-    public function filterHotels(array $data, int $cityId)
+    public function filterHotels(HotelFilter $filter, int $cityId)
     {
-        $sql = "SELECT h FROM App\Entity\Hotel h
-                WHERE h.city = '$cityId' AND ";
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $query = $qb->select("h")
+            ->from("App\Entity\Hotel", "h")
+            ->where('h.city = :cityId')->setParameter('cityId',$cityId);
 
-        if(!empty($data['category']->first())){
-            $categories = '';
-            foreach ($data['category'] as $category) {
-                $name = $category->getId();
-                $categories .= "'$name',";
-            }
-            $categories =rtrim($categories, ',');
-            $sql .= "h.category IN ($categories)";
-            $found = true;
+        if (!empty($filter->getCategories()->first())) {
+            /* @var Collection $categoriesCollection */
+            $categoriesCollection = $filter->getCategories();
+            $categories = $categoriesCollection->map(function (Category $category) {
+                return $category->getId();
+            });
+            $query->andWhere('h.category IN (:categories)')
+                ->setParameter('categories', $categories, Connection::PARAM_INT_ARRAY);
         }
+        $query->andWhere('h.price BETWEEN :priceMin AND :priceMax')->setParameter('priceMin', $filter->getPriceMin())
+                                                                   ->setParameter( 'priceMax',$filter->getPriceMax());
+        $query->andWhere('h.capacity BETWEEN :capacityMin AND :capacityMax')->setParameter('capacityMin',$filter->getCapacityMin())
+                                                                            ->setParameter('capacityMax',$filter->getCapacityMax());
 
-        if(!empty($data['priceMin'])){
-            $min = $data['priceMin'];
-            $max = $data['priceMax'];
-            if (isset($found)){
-                $sql .= " AND ";
-            }
-            $sql .= "h.price BETWEEN $min AND $max";
-            $found =true;
-        }
-        if(!empty($data['capacityMin'])){
-            $min = $data['capacityMin'];
-            $max = $data['capacityMax'];
-            if (isset($found)){
-                $sql .= " AND ";
-            }
-            $sql .= "h.capacity BETWEEN $min AND $max";
-        }
-        $em = $this->getEntityManager();
-        $query = $em->createQuery($sql);
 
-        return $query->getResult();
-
+        return $query->getQuery()->getResult();
     }
+
 
 //    public function findAllHotelsWithBusyDays()
 //    {
@@ -153,5 +137,5 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
 //        return $stmt->fetchAll();
 //    }
 
-
 }
+

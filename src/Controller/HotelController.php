@@ -16,11 +16,9 @@ use App\Form\CheckoutForm;
 use App\Form\CommentForm;
 use App\Service\HotelPage\HotelPageInterface;
 use App\Service\HotelPage\HotelPageService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HotelController extends AbstractController
@@ -54,10 +52,11 @@ class HotelController extends AbstractController
         $user = $service->getUser($lastUsername);
         $hotel = $service->getHotel($id);
 
-        $session = new Session();
-        $startDate = $session->get('startDate');
-        $endDate = $session->get('endDate');
-        $guests =  $session->get('guests');
+
+        $startDate = $this->get('session')->get('startDate');
+        $endDate = $this->get('session')->get('endDate');
+        $guests =  $this->get('session')->get('guests');
+
 
         $form = $this->createForm(CheckoutForm::class);
         $form->handleRequest($request);
@@ -114,7 +113,7 @@ class HotelController extends AbstractController
         ]);
     }
 
-    public function addHotel(HotelPageService $service,Request $request, EntityManagerInterface $manager)
+    public function addHotel(HotelPageService $service,Request $request)
     {
         $form = $this->createForm(AddHotelForm::class);
         $form->handleRequest($request);

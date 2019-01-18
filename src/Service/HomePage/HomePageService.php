@@ -10,6 +10,7 @@ namespace App\Service\HomePage;
 
 
 use App\Hotel\HotelCollection;
+use App\Hotel\HotelFilter;
 use App\Hotel\HotelMapper;
 use App\Repository\City\CityRepository;
 use App\Repository\Hotel\HotelRepository;
@@ -100,28 +101,26 @@ class HomePageService implements HomePageServiceInterface
         $session->set('guests', $guests);
         $session->set('city', $city);
     }
-    public function getData(): array
-    {
-        $session = new Session();
-        $data['StartDate'] = $session->get('startDate');
-        $data['EndDate'] = $session->get('endDate');
-        $data['Guests'] = $session->get('guests');
-        $data['City'] = $session->get('city');
 
-        return $data;
-    }
-    public function searchByFilter($data)
+    public function searchByFilter($filterData, string $city)
     {
-        $session = new Session();
-        $city = $this->cityRepository->findOneBy(['name' => $session->get('city')]);
+
+        $city = $this->cityRepository->findOneBy(['name' => $city]);
         $cityId = $city->getId();
+        $filter = new HotelFilter();
+        $filter->setCategories($filterData['category']);
+        $filter->setPriceMin($filterData['priceMin']);
+        $filter->setPriceMax($filterData['priceMax']);
+        $filter->setCapacityMin($filterData['capacityMin']);
+        $filter->setCapacityMax($filterData['capacityMax']);
 
-        $result = $this->hotelRepository->filterHotels($data, $cityId);
+        $result = $this->hotelRepository->filterHotels($filter, $cityId);
         $collection = new HotelCollection();
         $dataMapper = new HotelMapper();
         foreach ($result as $value){
             $collection->addHotel($dataMapper->entityToDto($value));
         }
-        return $collection;
+        dd($collection);
     }
+
 }
