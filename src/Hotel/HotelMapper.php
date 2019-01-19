@@ -62,7 +62,8 @@ class HotelMapper
             $imagesCollection,
             $cityMapper->entityToDto($entity->getCity()),
             $entity->getCoordinates(),
-            $entity->getCapacity()
+            $entity->getCapacity(),
+            $entity->getIsPublished()
         );
     }
 }

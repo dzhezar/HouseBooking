@@ -47,6 +47,7 @@ class HotelFixtures extends Fixture implements DependentFixtureInterface
                 ->setPrice($faker->numberBetween(1,1000))
                 ->setCoordinates($faker->latitude.', '.$faker->longitude)
                 ->setCapacity($faker->numberBetween(1,10))
+                ->setIsPublished($faker->boolean(80));
             ;
             $manager->persist($hotel);
 

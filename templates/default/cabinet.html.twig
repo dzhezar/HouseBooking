@@ -44,9 +44,19 @@
                         </ul>
                         </p>
                     </div>
-                    <a class="btn btn-primary" href="{{ path('deleteHotel', {'id': ownedHotel.id }) }}">Delete Hotel
+                    {% if   ownedHotel.isPublished  == 1  %}
+                    <a class="btn btn-primary" href="{{ path('unpublishHotel', {'id': ownedHotel.id }) }}">Unpublish Hotel
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
+                    {% else %}
+                        <a class="btn btn-primary" href="{{ path('publishHotel', {'id': ownedHotel.id }) }}">Publish Hotel
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    {% endif %}
+                    <a class="btn btn-primary" href="{{ path('deleteHotel', {'id': ownedHotel.id }) }}">Delete Hotel Forever
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+
                 </div>
             </div>
         {% endfor %}

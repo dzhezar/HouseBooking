@@ -27,10 +27,10 @@ class Hotel
     private $city;
     private $coordinates;
     private $capacity;
+    private $isPublished;
 
 
-
-    public function __construct(int $id, string $name, string $address, User $owner, Category $category, CommentsCollection $comments, BusyDaysCollection $busyDays, string $description, float $price, ImageCollection $images, City $city, string $coordinates, int $capacity)
+    public function __construct(int $id, string $name, string $address, User $owner, Category $category, CommentsCollection $comments, BusyDaysCollection $busyDays, string $description, float $price, ImageCollection $images, City $city, string $coordinates, int $capacity, bool $isPublished)
     {
         $this->id = $id;
         $this->name = $name;
@@ -45,6 +45,7 @@ class Hotel
         $this->city = $city;
         $this->coordinates = $coordinates;
         $this->capacity = $capacity;
+        $this->isPublished = $isPublished;
     }
 
     public function getId(): int
@@ -110,5 +111,10 @@ class Hotel
     public function getCapacity(): int
     {
         return $this->capacity;
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->isPublished;
     }
 }

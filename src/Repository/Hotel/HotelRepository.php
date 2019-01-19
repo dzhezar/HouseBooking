@@ -53,6 +53,7 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
             ->leftJoin('App\Entity\City', 'c',
                 \Doctrine\ORM\Query\Expr\Join::WITH, 'h.city = c.id')
             ->where('c.name = :city')
+            ->andWhere('h.isPublished = 1')
             ->andWhere('h.capacity >= :guests')
             ->setParameters(['city' => $form->getCity(),
                 'guests' => $form->getGuests(),
@@ -85,6 +86,7 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
     public function findNumberOfHotels(int $count)
     {
         return $this->createQueryBuilder('h')
+            ->where('h.isPublished = 1')
             ->setMaxResults($count)
             ->getQuery()
             ->getResult();

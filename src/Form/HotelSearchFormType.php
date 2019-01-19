@@ -22,21 +22,9 @@ class HotelSearchFormType extends AbstractType
     {
         $builder
             ->add('City',TextType::class)
-            ->add('StartDate',HiddenType::class,[
-                'data' => $this->getDates()['start']
-            ])
-            ->add('EndDate',HiddenType::class,[
-                'data' => $this->getDates()['end']
-            ])
+            ->add('StartDate',HiddenType::class)
+            ->add('EndDate',HiddenType::class)
             ->add('Guests',IntegerType::class)
             ;
     }
-    private function getDates()
-    {
-        $dates['start'] = date('Y-m-d');
-        $date =  new DateTime();
-        $dates['end'] = $date->modify('+1 week')->format('Y-m-d');
-        return $dates;
-    }
-
 }

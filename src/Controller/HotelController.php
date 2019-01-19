@@ -108,6 +108,20 @@ class HotelController extends AbstractController
         ]);
     }
 
+    public function unpublishHotel(string $id, HotelPageServiceInterface $service)
+    {
+        $hotel = $service->getHotel($id);
+        $service->unpublishHotel($hotel);
+        return $this->redirectToRoute('cabinet');
+    }
+
+    public function publishHotel(string $id, HotelPageServiceInterface $service)
+    {
+        $hotel = $service->getHotel($id);
+        $service->publishHotel($hotel);
+        return $this->redirectToRoute('cabinet');
+    }
+
     public function deleteHotel(string $id, HotelPageServiceInterface $service)
     {
 

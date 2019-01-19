@@ -29,8 +29,6 @@ class DefaultController extends AbstractController
         $form = $this->createForm(HotelSearchFormType::class);
         $form->handleRequest($request);
 
-
-
         if($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
             list('City' => $city,'Guests'=> $guests,'StartDate'=> $startDate,'EndDate'=> $endDate) =  $formData ;
@@ -71,7 +69,6 @@ class DefaultController extends AbstractController
 
         $filterForm = $this->createForm(FilterForm::class);
         $filterForm->handleRequest($request);
-        //dd($requestData);
         if ($filterForm->isSubmitted() && $filterForm->isValid()){
 
             $filterInfo = $filterForm->getData();

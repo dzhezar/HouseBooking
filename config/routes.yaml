@@ -30,4 +30,10 @@ addHotel:
 deleteHotel:
     path: /deleteHotel/{id}
     controller: App\Controller\HotelController::deleteHotel
+unpublishHotel:
+    path: /unpublishHotel/{id}
+    controller: App\Controller\HotelController::unpublishHotel
+publishHotel:
+    path: /publishHotel/{id}
+    controller: App\Controller\HotelController::publishHotel
 

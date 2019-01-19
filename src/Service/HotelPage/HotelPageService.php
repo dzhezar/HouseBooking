@@ -107,6 +107,7 @@ class HotelPageService implements HotelPageServiceInterface
             ->setPrice($form['price'])
             ->setAddress($form['pacInput'])
             ->setCoordinates($form['info'])
+            ->setIsPublished(true)
             ;
         $this->em->persist($hotel);
         $this->em->flush();
@@ -126,7 +127,9 @@ class HotelPageService implements HotelPageServiceInterface
         $this->em->flush();
     }
 
-    public function deleteHotel(Hotel $hotel, $imagesDir)
+
+
+    public function deleteHotel(Hotel $hotel, string $imagesDir)
     {
         $city = $hotel->getCity();
         $hotelsInSameCity = $this->em->getRepository(Hotel::class)->findBy(['city' => $city]);
@@ -155,6 +158,20 @@ class HotelPageService implements HotelPageServiceInterface
         if (count($hotelsInSameCity) == 1){
             $this->em->remove($city);
         }
+        $this->em->flush();
+    }
+
+    public function unpublishHotel(Hotel $hotel)
+    {
+        $hotel->setIsPublished(false);
+        $this->em->persist($hotel);
+        $this->em->flush();
+    }
+
+    public function publishHotel(Hotel $hotel)
+    {
+        $hotel->setIsPublished(true);
+        $this->em->persist($hotel);
         $this->em->flush();
     }
 

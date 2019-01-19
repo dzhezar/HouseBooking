@@ -21,4 +21,7 @@ interface HotelPageServiceInterface
     public function setHotel(User $user,array $form): Hotel;
     public function mailToUser(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests);
     public function mailToOwner(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests);
+    public function deleteHotel(Hotel $hotel, string $imagesDir);
+    public function unpublishHotel(Hotel $hotel);
+    public function publishHotel(Hotel $hotel);
 }

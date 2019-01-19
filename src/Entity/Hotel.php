@@ -81,6 +81,11 @@ class Hotel
      */
     private $capacity;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublished;
+
 
     public function __construct()
     {
@@ -291,6 +296,18 @@ class Hotel
     public function setCapacity(int $capacity): self
     {
         $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function getIsPublished(): ?bool
+    {
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(bool $isPublished): self
+    {
+        $this->isPublished = $isPublished;
 
         return $this;
     }
