@@ -38,15 +38,16 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.1",
-        "symfony/maker-bundle": "^1.5",
-        "symfony/test-pack": "^1.0",
+        "friendsofphp/php-cs-fixer": "^2.14",
         "fzaninotto/faker": "^1.8",
         "symfony/browser-kit": "^4.1",
         "symfony/css-selector": "^4.1",
         "symfony/debug-pack": "*",
         "symfony/dotenv": "^4.1",
+        "symfony/maker-bundle": "^1.5",
         "symfony/phpunit-bridge": "^4.1",
         "symfony/profiler-pack": "*",
+        "symfony/test-pack": "^1.0",
         "symfony/web-server-bundle": "^4.1"
     },
     "config": {
@@ -81,7 +82,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "cs-fix": "php-cs-fixer fix --allow-risky=yes"
     },
     "conflict": {
         "symfony/symfony": "*"

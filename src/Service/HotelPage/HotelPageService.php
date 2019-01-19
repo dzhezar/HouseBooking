@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 08.01.19
- * Time: 3:00
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Service\HotelPage;
-
 
 use App\Entity\BusyDays;
 use App\Entity\City;
@@ -52,6 +50,7 @@ class HotelPageService implements HotelPageServiceInterface
         ;
         $this->em->persist($comment);
         $this->em->flush();
+
         return $comment;
     }
 
@@ -63,12 +62,14 @@ class HotelPageService implements HotelPageServiceInterface
         $realEnd = new \DateTime($form['EndDate']);
         $realEnd->add($interval);
 
-        $period = new \DatePeriod(new \DateTime($form['StartDate']),
+        $period = new \DatePeriod(
+            new \DateTime($form['StartDate']),
                                   $interval,
-                                  $realEnd);
+                                  $realEnd
+        );
         $nightsCounter = -1;
 
-        foreach ($period as $date){
+        foreach ($period as $date) {
             $busyDay = new BusyDays();
             $busyDay
                 ->setUser($user)
@@ -84,15 +85,15 @@ class HotelPageService implements HotelPageServiceInterface
         return $nightsCounter;
     }
 
-    public function setHotel(User $user,array $form): Hotel
+    public function setHotel(User $user, array $form): Hotel
     {
-        $address = explode(',',$form['pacInput']);
-        $city = $this->em->getRepository(City::class)->findOneBy(['name' => ltrim($address[2])]);
+        $address = \explode(',', $form['pacInput']);
+        $city = $this->em->getRepository(City::class)->findOneBy(['name' => \ltrim($address[2])]);
 
 
-        if (empty($city)){
+        if (empty($city)) {
             $city = new City();
-            $city->setName(ltrim($address[2]));
+            $city->setName(\ltrim($address[2]));
             $this->em->persist($city);
             $this->em->flush();
         }
@@ -135,19 +136,22 @@ class HotelPageService implements HotelPageServiceInterface
         $hotelsInSameCity = $this->em->getRepository(Hotel::class)->findBy(['city' => $city]);
 
         $images = $this->em->getRepository(Images::class)->findBy(['hotel' => $hotel]);
-        foreach ($images as $image){
-            unlink($imagesDir.'/'.$image->getImage());
+
+        foreach ($images as $image) {
+            \unlink($imagesDir . '/' . $image->getImage());
             $this->em->remove($image);
         }
         $this->em->flush();
 
         $comments = $this->em->getRepository(Comment::class)->findBy(['hotel' => $hotel]);
+
         foreach ($comments as $comment) {
             $this->em->remove($comment);
         }
         $this->em->flush();
 
         $busyDays = $this->em->getRepository(BusyDays::class)->findBy(['hotel' => $hotel]);
+
         foreach ($busyDays as $busyDay) {
             $this->em->remove($busyDay);
         }
@@ -155,7 +159,7 @@ class HotelPageService implements HotelPageServiceInterface
 
         $this->em->remove($hotel);
 
-        if (count($hotelsInSameCity) == 1){
+        if (1 == \count($hotelsInSameCity)) {
             $this->em->remove($city);
         }
         $this->em->flush();
@@ -177,21 +181,19 @@ class HotelPageService implements HotelPageServiceInterface
 
     public function mailToUser(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests)
     {
-
-
-
-        $message = (new \Swift_Message("You have booked a hotel " ))
+        $message = (new \Swift_Message('You have booked a hotel '))
             ->setFrom($email)
             ->setTo($user->getEmail())
             ->setBody(
                 $this->environment->render(
-                    'email/checkoutToUser.html.twig', [
+                    'email/checkoutToUser.html.twig',
+                    [
                         'user' => $user,
                         'hotel' => $hotel,
                         'nights' => $nightsCount,
                         'startDate' => $startDate,
                         'endDate' => $endDate,
-                        'guests'=> $guests
+                        'guests'=> $guests,
                     ]
                 ),
                 'text/html'
@@ -201,20 +203,19 @@ class HotelPageService implements HotelPageServiceInterface
 
     public function mailToOwner(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests)
     {
-
-
         $message = (new \Swift_Message('Somebody booked your hotel'))
             ->setFrom($email)
             ->setTo($hotel->getOwner()->getEmail())
             ->setBody(
                 $this->environment->render(
-                    'email/checkoutToOwner.html.twig', [
+                    'email/checkoutToOwner.html.twig',
+                    [
                         'user' => $user,
                         'hotel' => $hotel,
                         'nights' => $nightsCount,
                         'startDate' => $startDate,
                         'endDate' => $endDate,
-                        'guests' => $guests
+                        'guests' => $guests,
                     ]
                 ),
                 'text/html'

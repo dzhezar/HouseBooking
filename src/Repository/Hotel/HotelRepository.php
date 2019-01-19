@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
+ */
+
 namespace App\Repository\Hotel;
 
 use App\Dto\HotelSearchForm;
@@ -11,8 +16,8 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Hotel|null find($id, $lockMode = null, $lockVersion = null)
- * @method Hotel|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|Hotel find($id, $lockMode = null, $lockVersion = null)
+ * @method null|Hotel findOneBy(array $criteria, array $orderBy = null)
  * @method Hotel[]    findAll()
  * @method Hotel[]    findBusyHotels($dates)
  * @method Hotel[]    findAllWithHotels($start,$finish)
@@ -48,20 +53,30 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
     public function findAllFiltered(HotelSearchForm $form)
     {
         $query =  $this->createQueryBuilder('h')
-            ->leftJoin('App\Entity\BusyDays', 'b',
-                \Doctrine\ORM\Query\Expr\Join::WITH, 'h.id = b.hotel')
-            ->leftJoin('App\Entity\City', 'c',
-                \Doctrine\ORM\Query\Expr\Join::WITH, 'h.city = c.id')
+            ->leftJoin(
+                'App\Entity\BusyDays',
+                'b',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'h.id = b.hotel'
+            )
+            ->leftJoin(
+                'App\Entity\City',
+                'c',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'h.city = c.id'
+            )
             ->where('c.name = :city')
             ->andWhere('h.isPublished = 1')
             ->andWhere('h.capacity >= :guests')
             ->setParameters(['city' => $form->getCity(),
                 'guests' => $form->getGuests(),
             ]);
+
         if ($form->getCategory()) {
             /* @var Collection $categoriesCollection */
             $categoriesCollection = new ArrayCollection();
-            foreach ($form->getCategory() as $category){
+
+            foreach ($form->getCategory() as $category) {
                 $categoriesCollection->add($category);
             }
             $categories = $categoriesCollection->map(function (Category $category) {
@@ -72,8 +87,8 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
         }
         $query->andWhere('h.price BETWEEN :priceMin AND :priceMax')->setParameter('priceMin', $form->getPriceMin())->setParameter('priceMax', $form->getPriceMax());
 
-        $query->andWhere('h.capacity BETWEEN :capacityMin AND :capacityMax')->setParameter('capacityMin',$form->getCapacityMin())
-            ->setParameter('capacityMax',$form->getCapacityMax());
+        $query->andWhere('h.capacity BETWEEN :capacityMin AND :capacityMax')->setParameter('capacityMin', $form->getCapacityMin())
+            ->setParameter('capacityMax', $form->getCapacityMax());
 
         return $query->getQuery()->getResult();
     }
@@ -95,8 +110,12 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
     public function findBookedHotelsByUser(int $id)
     {
         return $this->createQueryBuilder('h')
-            ->leftJoin('App\Entity\BusyDays', 'b',
-                \Doctrine\ORM\Query\Expr\Join::WITH, 'h.id = b.hotel')
+            ->leftJoin(
+                'App\Entity\BusyDays',
+                'b',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'h.id = b.hotel'
+            )
             ->where('b.user = :user')
             ->setParameter('user', $id)
             ->distinct()
@@ -113,6 +132,4 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
             ->getQuery()
             ->getResult();
     }
-
 }
-

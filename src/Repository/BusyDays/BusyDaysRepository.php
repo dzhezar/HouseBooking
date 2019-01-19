@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
+ */
+
 namespace App\Repository\BusyDays;
 
 use App\Entity\BusyDays;
@@ -7,8 +12,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method BusyDays|null find($id, $lockMode = null, $lockVersion = null)
- * @method BusyDays|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|BusyDays find($id, $lockMode = null, $lockVersion = null)
+ * @method null|BusyDays findOneBy(array $criteria, array $orderBy = null)
  * @method BusyDays[]    findAll()
  * @method BusyDays[]    findFreeHotels()
  * @method BusyDays[]    findBookedHotelsByUser(int $id)
@@ -35,10 +40,10 @@ class BusyDaysRepository extends ServiceEntityRepository implements BusyDaysRepo
 
     public function findBusyHotels(array $parameter)
     {
-       $dates = "('" . implode("','" , $parameter) . "')";
+        $dates = "('" . \implode("','", $parameter) . "')";
 
         $this->createQueryBuilder('b')
-            ->innerJoin('b.hotel','h')
+            ->innerJoin('b.hotel', 'h')
             ->addSelect('h')
             ->where('b.date IN (:dates)')
             ->setParameter('dates', $dates)

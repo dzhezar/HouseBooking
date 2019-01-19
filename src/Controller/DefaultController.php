@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 30.12.18
- * Time: 23:40
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Controller;
-
 
 use App\Dto\HotelSearchForm;
 use App\Form\FilterForm;
@@ -29,27 +27,27 @@ class DefaultController extends AbstractController
         $form = $this->createForm(HotelSearchFormType::class);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            list('City' => $city,'Guests'=> $guests,'StartDate'=> $startDate,'EndDate'=> $endDate) =  $formData ;
+            ['City' => $city,'Guests'=> $guests,'StartDate'=> $startDate,'EndDate'=> $endDate] =  $formData ;
             $session = new Session();
-            $session->set('guests',$guests);
-            $session->set('startDate',$startDate);
-            $session->set('endDate',$endDate);
+            $session->set('guests', $guests);
+            $session->set('startDate', $startDate);
+            $session->set('endDate', $endDate);
 
-            $formDto = new HotelSearchForm($city,$guests,$startDate,$endDate);
+            $formDto = new HotelSearchForm($city, $guests, $startDate, $endDate);
 
-            return $this->redirectToRoute('searchresult',[
+            return $this->redirectToRoute('searchresult', [
                                                                 'city' => $formDto->getCity(),
                                                                 'guests' => $formDto->getGuests(),
                                                                 'startDate' => $formDto->getStartDate(),
-                                                                'endDate' => $formDto->getEndDate()
+                                                                'endDate' => $formDto->getEndDate(),
                                                                 ]);
         }
 
-        return $this->render('default/index.html.twig',[
+        return $this->render('default/index.html.twig', [
             'form' => $form->createView(),
-            'mainHotels' => $mainHotels
+            'mainHotels' => $mainHotels,
         ]);
     }
 
@@ -65,48 +63,49 @@ class DefaultController extends AbstractController
         $capacityMin  = $request->query->get('capacityMin');
         $capacityMax  = $request->query->get('capacityMax');
 
-        $requestData = new HotelSearchForm($city,$guests,$startDate,$endDate,$category,$priceMin,$priceMax,$capacityMin,$capacityMax);
+        $requestData = new HotelSearchForm($city, $guests, $startDate, $endDate, $category, $priceMin, $priceMax, $capacityMin, $capacityMax);
 
         $filterForm = $this->createForm(FilterForm::class);
         $filterForm->handleRequest($request);
-        if ($filterForm->isSubmitted() && $filterForm->isValid()){
 
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
             $filterInfo = $filterForm->getData();
-            $filterData = new HotelFilter($filterInfo['category'],$filterInfo['priceMin'],$filterInfo['priceMax'],$filterInfo['capacityMin'],$filterInfo['capacityMax']);
+            $filterData = new HotelFilter($filterInfo['category'], $filterInfo['priceMin'], $filterInfo['priceMax'], $filterInfo['capacityMin'], $filterInfo['capacityMax']);
 
-            return $this->redirectToRoute('searchresult',[
+            return $this->redirectToRoute('searchresult', [
                                                                 'city' => $city,
                                                                 'guests' => $guests,
                                                                 'startDate' => $startDate,
                                                                 'endDate' => $endDate,
-                                                                'category' => urlencode(serialize($filterData->getCategories()->getValues())),
+                                                                'category' => \urlencode(\serialize($filterData->getCategories()->getValues())),
                                                                 'priceMin' => $filterData->getPriceMin(),
                                                                 'priceMax' => $filterData->getPriceMax(),
                                                                 'capacityMin' => $filterData->getCapacityMin(),
-                                                                'capacityMax' => $filterData->getCapacityMax()
+                                                                'capacityMax' => $filterData->getCapacityMax(),
                                                                 ]);
         }
 
         $searchResult = $service->searchHotels($requestData);
 
 
-        return $this->render('default/searchResult.html.twig',[
+        return $this->render('default/searchResult.html.twig', [
             'form' =>$filterForm->createView(),
             'hotels' => $searchResult,
             'city' => $city,
         ]);
-
     }
 
 
     public function search(Request $request, HomePageServiceInterface $service)
     {
         $result = $service->ajaxSearch($request->get('slug'));
-        if(empty($result)){
+
+        if (empty($result)) {
             return new Response('Not found');
         }
-        return $this->render('default/ajax.html.twig',[
-            'cities' =>$result
+
+        return $this->render('default/ajax.html.twig', [
+            'cities' =>$result,
         ]);
     }
 
@@ -118,11 +117,9 @@ class DefaultController extends AbstractController
         $bookedHotels = $service->getBookedHotels($user->getId());
         $ownedHotels = $service->getOwnedHotels($user->getId());
 
-        return $this->render('default/cabinet.html.twig',[
+        return $this->render('default/cabinet.html.twig', [
              'bookedHotels' => $bookedHotels,
              'ownedHotels' => $ownedHotels,
          ]);
-
     }
-
 }
