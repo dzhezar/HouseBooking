@@ -14,24 +14,21 @@ use App\Entity\Images;
 use App\Form\AddHotelForm;
 use App\Form\CheckoutForm;
 use App\Form\CommentForm;
-use App\Service\HotelPage\HotelPageInterface;
-use App\Service\HotelPage\HotelPageService;
+use App\Service\HotelPage\HotelPageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HotelController extends AbstractController
 {
-     public function showHotel(string $id, HotelPageInterface $service, Request $request, AuthenticationUtils $authenticationUtils)
+     public function showHotel(string $id, HotelPageServiceInterface $service, Request $request)
     {
         $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['hotel' => $id]);
         $images = $this->getDoctrine()->getRepository(Images::class)->findBy(['hotel' => $id]);
         $hotel = $service->getHotel($id);
         $form = $this->createForm(CommentForm::class);
         $form->handleRequest($request);
-        $lastUsername = $authenticationUtils->getLastUsername();
-        $user = $service->getUser($lastUsername);
+        $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()){
 
@@ -46,61 +43,24 @@ class HotelController extends AbstractController
             'images' => $images
         ]);
     }
-    public function checkoutHotel(string $id, HotelPageService $service,  Request $request, AuthenticationUtils $authenticationUtils, \Swift_Mailer $mailer)
+    public function checkoutHotel(string $id, HotelPageServiceInterface $service,  Request $request)
     {
-        $lastUsername = $authenticationUtils->getLastUsername();
-        $user = $service->getUser($lastUsername);
+        $user = $this->getUser();
+        $email = $this->getParameter('email');
         $hotel = $service->getHotel($id);
-
-
         $startDate = $this->get('session')->get('startDate');
         $endDate = $this->get('session')->get('endDate');
         $guests =  $this->get('session')->get('guests');
-
 
         $form = $this->createForm(CheckoutForm::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
             $nightsCount = $service->setCheckoutDays($id, $form->getData(), $user);
+            $service->mailToUser($email,$user,$hotel,$nightsCount,$startDate, $endDate, $guests);
+            $service->mailToOwner($email,$user,$hotel,$nightsCount,$startDate, $endDate, $guests);
 
-            $message = (new \Swift_Message("You have booked a hotel " ))
-                ->setFrom('dzhezik@gmail.com')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        'email/checkoutToUser.html.twig', [
-                            'user' => $user,
-                            'hotel' => $hotel,
-                            'nights' => $nightsCount,
-                            'startDate' => $startDate,
-                            'endDate' => $endDate,
-                            'guests'=> $guests
-                        ]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
-
-            $message = (new \Swift_Message('Somebody booked your hotel'))
-                ->setFrom('dzhezik@gmail.com')
-                ->setTo($hotel->getOwner()->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        'email/checkoutToOwner.html.twig', [
-                            'user' => $user,
-                            'hotel' => $hotel,
-                            'nights' => $nightsCount,
-                            'startDate' => $startDate,
-                            'endDate' => $endDate,
-                            'guests' => $guests
-                        ]
-                    ),
-                    'text/html'
-                );
-            $mailer->send($message);
-
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('cabinet');
         }
 
         return $this->render('default/checkout.html.twig',[
@@ -113,42 +73,47 @@ class HotelController extends AbstractController
         ]);
     }
 
-    public function addHotel(HotelPageService $service,Request $request)
+    public function addHotel(HotelPageServiceInterface $service,Request $request)
     {
         $form = $this->createForm(AddHotelForm::class);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
 
-        if($form->isSubmitted() && $form->isValid()){
-            $hotel = $service->setHotel($form->getData());
-            foreach ($form->getData()['images'] as $image){
-                $fileName = md5(uniqid()).'.'.$image->guessExtension();
-                $service->setImage($hotel,$fileName);
+        if($form->isSubmitted() && $form->isValid()) {
 
-                try {
-                    $image->move(
-                        $this->getParameter('images_directory'),
-                        $fileName
-                    );
-                } catch (FileException $e) {
+                $hotel = $service->setHotel($user, $form->getData());
+                foreach ($form->getData()['images'] as $image) {
+                    $fileName = md5(uniqid()) . '.' . $image->guessExtension();
+                    $service->setImage($hotel, $fileName);
+
+                    try {
+                        $image->move(
+                            $this->getParameter('images_directory'),
+                            $fileName
+                        );
+                    } catch (FileException $e) {
+
+                    }
 
                 }
+                return $this->redirectToRoute('cabinet');
 
-            }
-            return $this->redirectToRoute('cabinet');
+
         }
 
         return $this->render('default/addHotel.html.twig',[
             'form' => $form->createView(),
+
         ]);
     }
 
-    public function deleteHotel(string $id, HotelPageService $service)
+    public function deleteHotel(string $id, HotelPageServiceInterface $service)
     {
 
-        $publicDir = $this->getParameter('public_directory');
+        $imagesDir = $this->getParameter('images_directory');
         $hotel = $service->getHotel($id);
-        $service->deleteHotel($hotel, $publicDir);
+        $service->deleteHotel($hotel, $imagesDir);
         return $this->redirectToRoute('cabinet');
     }
 }

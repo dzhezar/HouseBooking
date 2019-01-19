@@ -8,13 +8,11 @@
 
 namespace App\Service\HomePage;
 
-
+use App\Dto\HotelSearchForm;
 
 interface HomePageServiceInterface
 {
-    public function searchHotels(array $form);
+    public function searchHotels(HotelSearchForm $form);
     public function ajaxSearch(string $text);
     public function getMainHotels();
-    public function handleForm(array $form);
-    public function searchByFilter($data, string $city);
 }

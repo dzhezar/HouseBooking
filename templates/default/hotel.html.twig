@@ -11,7 +11,7 @@
                 <div class="carousel-inner">
                     {% for image in images %}
                         <div {% if loop.index0 == 0 %} class="carousel-item active" {% else %} class="carousel-item" {% endif %}>
-                            <img class="id-block w-100" style="object-fit:cover; height: 400px; width: 100%; background-color: #c8c8c8 " src="{{ image.image}}" alt="{{ image.image}}" />
+                            <img class="id-block w-100" style="object-fit:cover; height: 400px; width: 100%; background-color: #c8c8c8 " src="/uploads/images/{{ image.image}}" alt="/uploads/images/{{ image.image}}" />
                         </div>
                     {% endfor %}
                 </div>

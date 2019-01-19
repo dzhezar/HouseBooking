@@ -17,34 +17,28 @@ use App\Entity\Images;
 use App\Entity\User;
 use App\Repository\BusyDays\BusyDaysRepository;
 use App\Repository\Hotel\HotelRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Twig\Environment;
 
-class HotelPageService implements HotelPageInterface
+class HotelPageService implements HotelPageServiceInterface
 {
     private $hotelRepository;
-    private $userRepository;
     private $busyDaysRepository;
     private $em;
-    private $authenticationUtils;
+    private $mailer;
+    private $environment;
 
-    public function __construct(HotelRepository $hotelRepository, UserRepository $userRepository, BusyDaysRepository $busyDaysRepository, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils)
+    public function __construct(HotelRepository $hotelRepository, BusyDaysRepository $busyDaysRepository, EntityManagerInterface $em, \Swift_Mailer $mailer, Environment $environment)
     {
         $this->hotelRepository = $hotelRepository;
-        $this->userRepository = $userRepository;
         $this->busyDaysRepository = $busyDaysRepository;
         $this->em = $em;
-        $this->authenticationUtils = $authenticationUtils;
+        $this->mailer = $mailer;
+        $this->environment = $environment;
     }
     public function getHotel(string $id)
     {
         return $this->hotelRepository->findHotelById($id);
-    }
-
-    public function getUser(string $name)
-    {
-        return $this->userRepository->findUserByName($name);
     }
 
     public function setComment(string $id, string $text, User $user): Comment
@@ -90,10 +84,8 @@ class HotelPageService implements HotelPageInterface
         return $nightsCounter;
     }
 
-    public function setHotel(array $form): Hotel
+    public function setHotel(User $user,array $form): Hotel
     {
-        $lastUsername = $this->authenticationUtils->getLastUsername();
-        $user = $this->getUser($lastUsername);
         $address = explode(',',$form['pacInput']);
         $city = $this->em->getRepository(City::class)->findOneBy(['name' => ltrim($address[2])]);
 
@@ -119,8 +111,6 @@ class HotelPageService implements HotelPageInterface
         $this->em->persist($hotel);
         $this->em->flush();
 
-
-
         return $hotel;
     }
 
@@ -129,21 +119,21 @@ class HotelPageService implements HotelPageInterface
         $file = new Images();
         $file
             ->setHotel($hotel)
-            ->setImage('/uploads/images/'.$fileName)
+            ->setImage($fileName)
         ;
 
         $this->em->persist($file);
         $this->em->flush();
     }
 
-    public function deleteHotel(Hotel $hotel, $publicDir)
+    public function deleteHotel(Hotel $hotel, $imagesDir)
     {
         $city = $hotel->getCity();
         $hotelsInSameCity = $this->em->getRepository(Hotel::class)->findBy(['city' => $city]);
 
         $images = $this->em->getRepository(Images::class)->findBy(['hotel' => $hotel]);
         foreach ($images as $image){
-            unlink($publicDir.$image->getImage());
+            unlink($imagesDir.'/'.$image->getImage());
             $this->em->remove($image);
         }
         $this->em->flush();
@@ -166,5 +156,52 @@ class HotelPageService implements HotelPageInterface
             $this->em->remove($city);
         }
         $this->em->flush();
+    }
+
+    public function mailToUser(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests)
+    {
+
+
+
+        $message = (new \Swift_Message("You have booked a hotel " ))
+            ->setFrom($email)
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->environment->render(
+                    'email/checkoutToUser.html.twig', [
+                        'user' => $user,
+                        'hotel' => $hotel,
+                        'nights' => $nightsCount,
+                        'startDate' => $startDate,
+                        'endDate' => $endDate,
+                        'guests'=> $guests
+                    ]
+                ),
+                'text/html'
+            );
+        $this->mailer->send($message);
+    }
+
+    public function mailToOwner(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests)
+    {
+
+
+        $message = (new \Swift_Message('Somebody booked your hotel'))
+            ->setFrom($email)
+            ->setTo($hotel->getOwner()->getEmail())
+            ->setBody(
+                $this->environment->render(
+                    'email/checkoutToOwner.html.twig', [
+                        'user' => $user,
+                        'hotel' => $hotel,
+                        'nights' => $nightsCount,
+                        'startDate' => $startDate,
+                        'endDate' => $endDate,
+                        'guests' => $guests
+                    ]
+                ),
+                'text/html'
+            );
+        $this->mailer->send($message);
     }
 }

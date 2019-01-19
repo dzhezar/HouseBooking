@@ -20,11 +20,11 @@ class CityRepository extends ServiceEntityRepository
         parent::__construct($registry, City::class);
     }
 
-    public function ajaxSearch(string $text)
+    public function findByName(string $name)
     {
       return $this->createQueryBuilder('c')
                   ->where('c.name LIKE :text')
-                  ->setParameter('text', '%'.$text.'%')
+                  ->setParameter('text', '%'.$name.'%')
                   ->getQuery()
                   ->getResult()
           ;

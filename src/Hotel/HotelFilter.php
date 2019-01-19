@@ -18,6 +18,10 @@ class HotelFilter
     private $priceMax;
     private $capacityMin;
     private $capacityMax;
+    const DEFAULT_PRICE_MIN = 1;
+    const DEFAULT_PRICE_MAX = 1000;
+    const DEFAULT_CAPACITY_MIN = 1;
+    const DEFAULT_CAPACITY_MAX = 10;
 
     public function __construct(ArrayCollection $categories = null, int $priceMin = null, int $priceMax = null, int $capacityMin = null, int $capacityMax = null)
     {
@@ -40,62 +44,42 @@ class HotelFilter
 
     public function getPriceMin(): int
     {
-        return $this->priceMin ?? 1;
+        return $this->priceMin ?? self::DEFAULT_PRICE_MIN;
     }
 
     public function setPriceMin(?int $priceMin): void
     {
-        if($priceMin == null){
-            $this->priceMin = 1;
-        }
-        else {
-            $this->priceMin = $priceMin;
-        }
+        $this->priceMin = $priceMin;
     }
 
     public function getPriceMax(): int
     {
-        return $this->priceMax ?? 1000;
+        return $this->priceMax  ?? self::DEFAULT_PRICE_MAX;
     }
 
     public function setPriceMax(?int $priceMax): void
     {
-        if($priceMax == null){
-            $this->priceMax = 1000;
-        }
-        else {
             $this->priceMax = $priceMax;
-        }
     }
 
     public function getCapacityMin(): int
     {
-        return $this->capacityMin ?? 1;
+        return $this->capacityMin ?? self::DEFAULT_CAPACITY_MIN;
     }
 
     public function setCapacityMin(?int $capacityMin): void
     {
-        if($capacityMin == null){
-            $this->capacityMin = 1;
-        }
-        else {
             $this->capacityMin = $capacityMin;
-        }
     }
 
     public function getCapacityMax(): int
     {
-        return $this->capacityMax ?? 10;
+        return $this->capacityMax ?? self::DEFAULT_CAPACITY_MAX;
     }
 
     public function setCapacityMax(?int $capacityMax): void
     {
-        if($capacityMax == null){
-            $this->capacityMax= 10;
-        }
-        else {
-            $this->capacityMax = $capacityMax;
-        }
+        $this->capacityMax = $capacityMax;
     }
 
 }

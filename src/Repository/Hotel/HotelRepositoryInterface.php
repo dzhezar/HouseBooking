@@ -9,16 +9,15 @@
 namespace App\Repository\Hotel;
 
 
-use App\Hotel\HotelFilter;
+use App\Dto\HotelSearchForm;
 
 interface HotelRepositoryInterface
 {
     public function findAllWithCategories();
     public function findAllByCategory(string $category);
-    public function findFreeHotels(string $city, int $guests);
-    public function findHotelById(string $id);
+    public function findHotelById(int $id);
     public function findNumberOfHotels(int $count);
     public function findBookedHotelsByUser(int $id);
     public function findOwnedHotelsByUser(int $id);
-    public function filterHotels(HotelFilter $filter, int $cityId);
+    public function findAllFiltered(HotelSearchForm $form);
 }

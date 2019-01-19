@@ -1,10 +1,4 @@
 {
-    "captcha-com/captcha": {
-        "version": "4.2.3"
-    },
-    "captcha-com/symfony-captcha-bundle": {
-        "version": "4.2.10"
-    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -119,9 +113,6 @@
     "knplabs/knp-components": {
         "version": "v1.3.10"
     },
-    "knplabs/knp-paginator-bundle": {
-        "version": "v2.8.0"
-    },
     "monolog/monolog": {
         "version": "1.24.0"
     },
@@ -130,9 +121,6 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.1.1"
-    },
-    "php-paradise/array-keys-converter": {
-        "version": "1.0.x-dev"
     },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
@@ -444,15 +432,6 @@
             "branch": "master",
             "version": "3.3",
             "ref": "dae9b39fd6717970be7601101ce5aa960bf53d9a"
-        }
-    },
-    "symfony/webpack-encore-bundle": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "248c29c070dcd79e8333c676b0c5e284e3b365b5"
         }
     },
     "symfony/yaml": {

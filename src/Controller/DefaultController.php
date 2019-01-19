@@ -9,27 +9,44 @@
 namespace App\Controller;
 
 
+use App\Dto\HotelSearchForm;
 use App\Form\FilterForm;
-use App\Form\HomeForm;
+use App\Form\HotelSearchFormType;
+use App\Hotel\HotelFilter;
 use App\Service\CabinetPage\CabinetPageService;
 use App\Service\HomePage\HomePageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends AbstractController
 {
-    public function index(Request $request,HomePageServiceInterface $service): Response
+    public function index(Request $request, HomePageServiceInterface $service): Response
     {
         $mainHotels = $service->getMainHotels();
 
-        $form = $this->createForm(HomeForm::class);
+        $form = $this->createForm(HotelSearchFormType::class);
         $form->handleRequest($request);
 
+
+
         if($form->isSubmitted() && $form->isValid()) {
-            $service->handleForm($form->getData());
-            return $this->redirectToRoute('searchresult');
+            $formData = $form->getData();
+            list('City' => $city,'Guests'=> $guests,'StartDate'=> $startDate,'EndDate'=> $endDate) =  $formData ;
+            $session = new Session();
+            $session->set('guests',$guests);
+            $session->set('startDate',$startDate);
+            $session->set('endDate',$endDate);
+
+            $formDto = new HotelSearchForm($city,$guests,$startDate,$endDate);
+
+            return $this->redirectToRoute('searchresult',[
+                                                                'city' => $formDto->getCity(),
+                                                                'guests' => $formDto->getGuests(),
+                                                                'startDate' => $formDto->getStartDate(),
+                                                                'endDate' => $formDto->getEndDate()
+                                                                ]);
         }
 
         return $this->render('default/index.html.twig',[
@@ -40,27 +57,46 @@ class DefaultController extends AbstractController
 
     public function showSearchResult(Request $request, HomePageServiceInterface $service)
     {
+        $city = $request->query->get('city');
+        $guests = $request->query->get('guests');
+        $startDate = $request->query->get('startDate');
+        $endDate = $request->query->get('endDate');
+        $category = $request->query->get('category');
+        $priceMin  = $request->query->get('priceMin');
+        $priceMax  = $request->query->get('priceMax');
+        $capacityMin  = $request->query->get('capacityMin');
+        $capacityMax  = $request->query->get('capacityMax');
 
-
-        $data['StartDate'] = $this->get('session')->get('startDate');
-        $data['EndDate'] = $this->get('session')->get('endDate');
-        $data['Guests'] = $this->get('session')->get('guests');
-        $data['City'] = $this->get('session')->get('city');
+        $requestData = new HotelSearchForm($city,$guests,$startDate,$endDate,$category,$priceMin,$priceMax,$capacityMin,$capacityMax);
 
         $filterForm = $this->createForm(FilterForm::class);
         $filterForm->handleRequest($request);
+        //dd($requestData);
+        if ($filterForm->isSubmitted() && $filterForm->isValid()){
 
-        if ($filterForm->isSubmitted()){
-            $searchResult = $service->searchByFilter($filterForm->getData(),$data['City']);
+            $filterInfo = $filterForm->getData();
+            $filterData = new HotelFilter($filterInfo['category'],$filterInfo['priceMin'],$filterInfo['priceMax'],$filterInfo['capacityMin'],$filterInfo['capacityMax']);
+
+            return $this->redirectToRoute('searchresult',[
+                                                                'city' => $city,
+                                                                'guests' => $guests,
+                                                                'startDate' => $startDate,
+                                                                'endDate' => $endDate,
+                                                                'category' => urlencode(serialize($filterData->getCategories()->getValues())),
+                                                                'priceMin' => $filterData->getPriceMin(),
+                                                                'priceMax' => $filterData->getPriceMax(),
+                                                                'capacityMin' => $filterData->getCapacityMin(),
+                                                                'capacityMax' => $filterData->getCapacityMax()
+                                                                ]);
         }
-        else{
-            $searchResult = $service->searchHotels($data);
-        }
+
+        $searchResult = $service->searchHotels($requestData);
+
 
         return $this->render('default/searchResult.html.twig',[
             'form' =>$filterForm->createView(),
             'hotels' => $searchResult,
-            'city' => $data['City'],
+            'city' => $city,
         ]);
 
     }
@@ -78,10 +114,9 @@ class DefaultController extends AbstractController
     }
 
 
-    public function showCabinet(CabinetPageService $service, AuthenticationUtils $authenticationUtils)
+    public function showCabinet(CabinetPageService $service)
     {
-        $lastUsername = $authenticationUtils->getLastUsername();
-        $user = $service->getUser($lastUsername);
+        $user = $this->getUser();
 
         $bookedHotels = $service->getBookedHotels($user->getId());
         $ownedHotels = $service->getOwnedHotels($user->getId());

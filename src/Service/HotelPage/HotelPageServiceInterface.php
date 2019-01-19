@@ -13,12 +13,12 @@ use App\Entity\Comment;
 use App\Entity\Hotel;
 use App\Entity\User;
 
-interface HotelPageInterface
+interface HotelPageServiceInterface
 {
     public function getHotel(string $id);
-    public function getUser(string $name);
     public function setComment(string $id, string $text, User $user): Comment;
     public function setCheckoutDays(string $id, array $form, User $user): int ;
-    public function setHotel(array $form): Hotel;
-
+    public function setHotel(User $user,array $form): Hotel;
+    public function mailToUser(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests);
+    public function mailToOwner(string $email, User $user, Hotel $hotel, int $nightsCount, string $startDate, string $endDate, int $guests);
 }
