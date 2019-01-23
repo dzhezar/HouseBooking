@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
+ */
+
 namespace App\Security;
 
 use App\Entity\User;
@@ -60,6 +65,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }

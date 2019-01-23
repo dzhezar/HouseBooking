@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 02.01.19
- * Time: 22:17
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Dto;
-
 
 class Comment
 {
@@ -16,7 +14,7 @@ class Comment
     private $text;
 
 
-    public function __construct(string $text,User $author =null, Hotel $hotel = null)
+    public function __construct(string $text, User $author =null, Hotel $hotel = null)
     {
         $this->hotel = $hotel;
         $this->author = $author;

@@ -7,12 +7,13 @@
 
 namespace App\Repository\Hotel;
 
+use App\Dto\HotelFilter;
 use App\Dto\HotelSearchForm;
 use App\Entity\Category;
 use App\Entity\Hotel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Connection;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -50,7 +51,7 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
             ->getResult();
     }
 
-    public function findAllFiltered(HotelSearchForm $form)
+    public function findAllFiltered(HotelSearchForm $form, HotelFilter $filterDto)
     {
         $query =  $this->createQueryBuilder('h')
             ->leftJoin(
@@ -72,23 +73,20 @@ class HotelRepository extends ServiceEntityRepository implements HotelRepository
                 'guests' => $form->getGuests(),
             ]);
 
-        if ($form->getCategory()) {
+        if (!empty($filterDto->getCategory()->first())) {
             /* @var Collection $categoriesCollection */
-            $categoriesCollection = new ArrayCollection();
-
-            foreach ($form->getCategory() as $category) {
-                $categoriesCollection->add($category);
-            }
+            $categoriesCollection = $filterDto->getCategory();
             $categories = $categoriesCollection->map(function (Category $category) {
                 return $category->getId();
             });
-            $query->andWhere('h.category IN (:categories)')
-                ->setParameter('categories', $categories);
-        }
-        $query->andWhere('h.price BETWEEN :priceMin AND :priceMax')->setParameter('priceMin', $form->getPriceMin())->setParameter('priceMax', $form->getPriceMax());
 
-        $query->andWhere('h.capacity BETWEEN :capacityMin AND :capacityMax')->setParameter('capacityMin', $form->getCapacityMin())
-            ->setParameter('capacityMax', $form->getCapacityMax());
+            $query->andWhere('h.category IN (:categories)')
+                ->setParameter('categories', $categories, Connection::PARAM_INT_ARRAY);
+        }
+        $query->andWhere('h.price BETWEEN :priceMin AND :priceMax')->setParameter('priceMin', $filterDto->getPriceMin())->setParameter('priceMax', $filterDto->getPriceMax());
+
+        $query->andWhere('h.capacity BETWEEN :capacityMin AND :capacityMax')->setParameter('capacityMin', $filterDto->getCapacityMin())
+            ->setParameter('capacityMax', $filterDto->getCapacityMax());
 
         return $query->getQuery()->getResult();
     }

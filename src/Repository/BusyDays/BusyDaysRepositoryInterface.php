@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 04.01.19
- * Time: 14:04
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Repository\BusyDays;
-
 
 interface BusyDaysRepositoryInterface
 {

@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 14.01.19
- * Time: 2:32
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Service\CabinetPage;
-
 
 use App\Hotel\HotelCollection;
 use App\Hotel\HotelMapper;
@@ -32,13 +30,14 @@ class CabinetPageService
 
     public function getBookedHotels(int $id): HotelCollection
     {
-       $bookedHotels = $this->hotelRepository->findBookedHotelsByUser($id);
-       $collection = new HotelCollection();
-       $dataMapper = new HotelMapper();
+        $bookedHotels = $this->hotelRepository->findBookedHotelsByUser($id);
+        $collection = new HotelCollection();
+        $dataMapper = new HotelMapper();
 
         foreach ($bookedHotels as $bookedHotel) {
             $collection->addHotel($dataMapper->entityToDto($bookedHotel));
-       }
+        }
+
         return $collection;
     }
 
@@ -51,6 +50,7 @@ class CabinetPageService
         foreach ($ownedHotels as $ownedHotel) {
             $collection->addHotel($dataMapper->entityToDto($ownedHotel));
         }
+
         return $collection;
     }
 }

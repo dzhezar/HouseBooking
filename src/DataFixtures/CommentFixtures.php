@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 02.01.19
- * Time: 22:03
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\DataFixtures;
-
 
 use App\Entity\Comment;
 use App\Entity\Hotel;
@@ -28,11 +26,12 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        for ($i = 0; $i < 5000; $i++){
+
+        for ($i = 0; $i < 5000; $i++) {
             $comment = new Comment();
 
-            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0,999));
-            $author = $this->getReference(User::class . '_' . $faker->numberBetween(0,19));
+            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0, 999));
+            $author = $this->getReference(User::class . '_' . $faker->numberBetween(0, 19));
 
             $comment
                 ->setAuthor($author)
@@ -53,10 +52,10 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
      */
     public function getDependencies()
     {
-        return array(
+        return [
             HotelFixtures::class,
             UserFixtures::class,
-            CategoryFixtures::class
-        );
+            CategoryFixtures::class,
+        ];
     }
 }

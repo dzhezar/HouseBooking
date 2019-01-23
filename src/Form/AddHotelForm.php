@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 15.01.19
- * Time: 23:23
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Form;
-
 
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,26 +26,26 @@ class AddHotelForm extends AbstractType
     {
         $this->em = $em;
     }
-    public function buildForm(FormBuilderInterface $builder,array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name',TextType::class)
-            ->add('category',ChoiceType::class, [
+            ->add('name', TextType::class)
+            ->add('category', ChoiceType::class, [
                 'choices'  => $this->getCategories(),
 
-                'choice_label' => function($category, $key, $value) {
-                    /** @var Category $category */
+                'choice_label' => function ($category, $key, $value) {
+                    /* @var Category $category */
                     return $category->getName();
-                }
+                },
                 ])
-            ->add('capacity',IntegerType::class)
-            ->add('description',TextareaType::class)
-            ->add('price',IntegerType::class)
-            ->add('pacInput',TextType::class)
-            ->add('info',HiddenType::class)
-            ->add('images',FileType::class, [
+            ->add('capacity', IntegerType::class)
+            ->add('description', TextareaType::class)
+            ->add('price', IntegerType::class)
+            ->add('pacInput', TextType::class)
+            ->add('info', HiddenType::class)
+            ->add('images', FileType::class, [
                 'label' => 'Images',
-                'multiple' => true
+                'multiple' => true,
             ])
             ;
     }

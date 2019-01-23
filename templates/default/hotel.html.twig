@@ -29,7 +29,7 @@
                 <p>
                     {{ hotel.description }}
                 </p>
-                <h3 class="my-3">Hotel Facilities</h3>
+                <h3 class="my-3">Hotel Details</h3>
                 <ul>
                     <li>{{ hotel.address }}</li>
                     <li>{{ hotel.price }} $/night</li>
@@ -41,7 +41,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-6" style="margin-top: 20px">
         <div id="floating-panel">
             <input id="latlng" type="hidden" value="{{ hotel.coordinates }}">
             <input id="submit" type="hidden" value="Show Hotel On Map">

@@ -1,19 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 18.01.19
- * Time: 14:21
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
-namespace App\Hotel;
-
-
-use Doctrine\Common\Collections\ArrayCollection;
+namespace App\Dto;
 
 class HotelFilter
 {
-    private $categories;
+    private $category;
     private $priceMin;
     private $priceMax;
     private $capacityMin;
@@ -23,23 +19,23 @@ class HotelFilter
     const DEFAULT_CAPACITY_MIN = 1;
     const DEFAULT_CAPACITY_MAX = 10;
 
-    public function __construct(ArrayCollection $categories = null, int $priceMin = null, int $priceMax = null, int $capacityMin = null, int $capacityMax = null)
+    public function __construct(string $category = null, int $priceMin = null, int $priceMax = null, int $capacityMin = null, int $capacityMax = null)
     {
-        $this->categories = $categories;
+        $this->category = \unserialize(\urldecode($category));
         $this->priceMin = $priceMin;
         $this->priceMax = $priceMax;
         $this->capacityMin = $capacityMin;
         $this->capacityMax = $capacityMax;
     }
 
-    public function getCategories(): ArrayCollection
+    public function getCategory()
     {
-        return $this->categories;
+        return $this->category;
     }
 
-    public function setCategories(ArrayCollection $categories): void
+    public function setCategory($category): void
     {
-        $this->categories = $categories;
+        $this->category = $category;
     }
 
     public function getPriceMin(): int
@@ -49,17 +45,17 @@ class HotelFilter
 
     public function setPriceMin(?int $priceMin): void
     {
-        $this->priceMin = $priceMin;
+        $this->priceMin = $priceMin ?? self::DEFAULT_PRICE_MIN;
     }
 
     public function getPriceMax(): int
     {
-        return $this->priceMax  ?? self::DEFAULT_PRICE_MAX;
+        return $this->priceMax ?? self::DEFAULT_PRICE_MAX;
     }
 
     public function setPriceMax(?int $priceMax): void
     {
-            $this->priceMax = $priceMax;
+        $this->priceMax = $priceMax ?? self::DEFAULT_PRICE_MAX;
     }
 
     public function getCapacityMin(): int
@@ -69,7 +65,7 @@ class HotelFilter
 
     public function setCapacityMin(?int $capacityMin): void
     {
-            $this->capacityMin = $capacityMin;
+        $this->capacityMin = $capacityMin ?? self::DEFAULT_CAPACITY_MIN;
     }
 
     public function getCapacityMax(): int
@@ -79,7 +75,7 @@ class HotelFilter
 
     public function setCapacityMax(?int $capacityMax): void
     {
-        $this->capacityMax = $capacityMax;
+        $this->capacityMax = $capacityMax ?? self::DEFAULT_CAPACITY_MAX;
     }
 
 }

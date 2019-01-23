@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 31.12.18
- * Time: 3:42
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Hotel;
-
 
 use App\BusyDays\BusyDaysCollection;
 use App\BusyDays\BusyDaysMapper;
@@ -32,6 +30,7 @@ class HotelMapper
         $commentsCollection = new CommentsCollection();
         $commentsMapper = new CommentsMapper();
         $comments = $entity->getComments();
+
         foreach ($comments as $comment) {
             $commentsCollection->addComment($commentsMapper->entityToDtoWithOnlyText($comment));
         }
@@ -39,16 +38,19 @@ class HotelMapper
         $busyDaysCollection = new BusyDaysCollection();
         $busyDaysMapper = new BusyDaysMapper();
         $busyDays = $entity->getBusyDays();
-        foreach ($busyDays as $busyday){
+
+        foreach ($busyDays as $busyday) {
             $busyDaysCollection->addBusyDay($busyDaysMapper->entityToDtoWithOnlyDate($busyday));
         }
 
         $imagesCollection = new ImageCollection();
         $imageMapper = new ImageMapper();
         $images = $entity->getImages();
-        foreach ($images as $image){
+
+        foreach ($images as $image) {
             $imagesCollection->addImage($imageMapper->entityToDtoWithoutHotel($image));
         }
+
         return new HotelDto(
             $entity->getId(),
             $entity->getName(),

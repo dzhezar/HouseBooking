@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 07.01.19
- * Time: 4:07
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\DataFixtures;
-
 
 use App\Entity\Hotel;
 use App\Entity\Images;
@@ -18,14 +16,13 @@ use Faker\Factory;
 
 class ImageFixtures extends Fixture implements DependentFixtureInterface
 {
-
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
 
-        for ($i = 0; $i < 5000; $i++){
+        for ($i = 0; $i < 5000; $i++) {
             $image = new Images();
-            $hotel = $this->getReference(Hotel::class.'_'.$faker->numberBetween(0,999));
+            $hotel = $this->getReference(Hotel::class . '_' . $faker->numberBetween(0, 999));
 
             $image
                 ->setHotel($hotel)
@@ -38,11 +35,11 @@ class ImageFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-        return array(
+        return [
             UserFixtures::class,
             CategoryFixtures::class,
             CityFixtures::class,
             HotelFixtures::class,
-        );
+        ];
     }
 }

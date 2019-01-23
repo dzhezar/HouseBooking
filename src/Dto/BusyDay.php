@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 02.01.19
- * Time: 22:17
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Dto;
-
 
 class BusyDay
 {
@@ -37,6 +35,4 @@ class BusyDay
     {
         return $this->user;
     }
-
-
 }

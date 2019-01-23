@@ -228,7 +228,7 @@
         "version": "v4.2.1"
     },
     "symfony/dotenv": {
-        "version": "v4.2.1"
+        "version": "v4.2.2"
     },
     "symfony/event-dispatcher": {
         "version": "v4.2.1"

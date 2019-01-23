@@ -9,32 +9,20 @@ namespace App\Service\FilenameGeneration;
 
 class FilenameGeneratorService
 {
-    private $filename;
-    private $randomNumber;
+    private $strategy;
 
-    public function __construct()
+    public function __construct(StrategyInterface $strategy)
     {
-        $this->randomNumber = $this->getRandomNumber();
-
-        switch ($this->randomNumber) {
-            case 1:
-                $this->filename = \md5(\uniqid());
-                break;
-            case 2:
-                $this->filename = \crc32(\uniqid());
-                break;
-            case 3:
-                $this->filename = \sha1(\uniqid());
-        }
+        $this->strategy = $strategy;
     }
 
-    public function getRandomNumber()
+    public function setStrategy(StrategyInterface $strategy): void
     {
-        return \mt_rand(1, 3);
+        $this->strategy = $strategy;
     }
 
     public function getFilename(): string
     {
-        return $this->filename;
+        return $this->strategy->generateFilename(\uniqid());
     }
 }

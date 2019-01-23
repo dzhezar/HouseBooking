@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
+ */
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -167,7 +172,7 @@ class Hotel
     }
 
     /**
-     * @return Collection|BusyDays[]
+     * @return BusyDays[]|Collection
      */
     public function getBusyDays(): Collection
     {

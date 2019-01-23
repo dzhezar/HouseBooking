@@ -58,15 +58,24 @@ class HotelPageService implements HotelPageServiceInterface
     {
         $hotel = $this->getHotel($id);
 
-        $interval = new \DateInterval('P1D');
-        $realEnd = new \DateTime($form['EndDate']);
+        try {
+            $interval = new \DateInterval('P1D');
+        } catch (\Exception $e) {
+        }
+        try {
+            $realEnd = new \DateTime($form['EndDate']);
+        } catch (\Exception $e) {
+        }
         $realEnd->add($interval);
 
-        $period = new \DatePeriod(
-            new \DateTime($form['StartDate']),
-                                  $interval,
-                                  $realEnd
-        );
+        try {
+            $period = new \DatePeriod(
+                new \DateTime($form['StartDate']),
+                $interval,
+                $realEnd
+            );
+        } catch (\Exception $e) {
+        }
         $nightsCounter = -1;
 
         foreach ($period as $date) {

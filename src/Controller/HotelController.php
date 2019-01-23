@@ -13,6 +13,7 @@ use App\Form\AddHotelForm;
 use App\Form\CheckoutForm;
 use App\Form\CommentForm;
 use App\Service\FilenameGeneration\FilenameGeneratorService;
+use App\Service\FilenameGeneration\StrategySha1;
 use App\Service\HotelPage\HotelPageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -83,7 +84,7 @@ class HotelController extends AbstractController
             $hotel = $service->setHotel($user, $form->getData());
 
             foreach ($form->getData()['images'] as $image) {
-                $generatorService = new FilenameGeneratorService();
+                $generatorService = new FilenameGeneratorService(new StrategySha1());
                 $fileName = $generatorService->getFilename();
                 $service->setImage($hotel, $fileName);
 

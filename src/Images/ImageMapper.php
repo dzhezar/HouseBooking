@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 07.01.19
- * Time: 4:20
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Images;
-
 
 use App\Dto\Image as ImageDto;
 use App\Entity\Images;
@@ -18,6 +16,7 @@ class ImageMapper
     public function entityToDto(Images $entity): ImageDto
     {
         $hotelMapper = new HotelMapper();
+
         return new ImageDto(
             $entity->getImage(),
             $hotelMapper->entityToDto($entity->getHotel())
@@ -29,5 +28,4 @@ class ImageMapper
             $entity->getImage()
         );
     }
-
 }

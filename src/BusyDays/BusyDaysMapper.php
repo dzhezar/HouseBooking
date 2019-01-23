@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 02.01.19
- * Time: 23:43
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\BusyDays;
-
 
 use App\Dto\BusyDay as BusyDayDto;
 use App\Entity\BusyDays;

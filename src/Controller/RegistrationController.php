@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
+ */
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -14,8 +19,10 @@ class RegistrationController extends AbstractController
 {
     /**
      * @Route("/register", name="app_register")
+     *
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
+     *
      * @return Response
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response

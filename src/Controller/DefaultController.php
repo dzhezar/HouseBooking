@@ -7,12 +7,13 @@
 
 namespace App\Controller;
 
+use App\Dto\HotelFilter;
 use App\Dto\HotelSearchForm;
 use App\Form\FilterForm;
 use App\Form\HotelSearchFormType;
-use App\Hotel\HotelFilter;
 use App\Service\CabinetPage\CabinetPageService;
 use App\Service\HomePage\HomePageServiceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,18 +25,18 @@ class DefaultController extends AbstractController
     {
         $mainHotels = $service->getMainHotels();
 
-        $form = $this->createForm(HotelSearchFormType::class);
+        $formDto = new HotelSearchForm();
+
+        $form = $this->createForm(HotelSearchFormType::class, $formDto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
-            ['City' => $city,'Guests'=> $guests,'StartDate'=> $startDate,'EndDate'=> $endDate] =  $formData ;
             $session = new Session();
-            $session->set('guests', $guests);
-            $session->set('startDate', $startDate);
-            $session->set('endDate', $endDate);
+            $session->set('guests', $formDto->getGuests());
+            $session->set('startDate', $formDto->getStartDate());
+            $session->set('endDate', $formDto->getEndDate());
 
-            $formDto = new HotelSearchForm($city, $guests, $startDate, $endDate);
+
 
             return $this->redirectToRoute('searchresult', [
                                                                 'city' => $formDto->getCity(),
@@ -63,30 +64,35 @@ class DefaultController extends AbstractController
         $capacityMin  = $request->query->get('capacityMin');
         $capacityMax  = $request->query->get('capacityMax');
 
-        $requestData = new HotelSearchForm($city, $guests, $startDate, $endDate, $category, $priceMin, $priceMax, $capacityMin, $capacityMax);
+        $requestData = new HotelSearchForm($city, $guests, $startDate, $endDate);
 
-        $filterForm = $this->createForm(FilterForm::class);
+        $filterData = new HotelFilter($category, $priceMin, $priceMax, $capacityMin, $capacityMax);
+
+        if ($filterData->getCategory() == false) {
+            $filterData->setCategory(new ArrayCollection());
+        }
+
+        $filterDto = new HotelFilter();
+        $filterForm = $this->createForm(FilterForm::class,$filterDto);
         $filterForm->handleRequest($request);
 
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            $filterInfo = $filterForm->getData();
-            $filterData = new HotelFilter($filterInfo['category'], $filterInfo['priceMin'], $filterInfo['priceMax'], $filterInfo['capacityMin'], $filterInfo['capacityMax']);
+
 
             return $this->redirectToRoute('searchresult', [
                                                                 'city' => $city,
                                                                 'guests' => $guests,
                                                                 'startDate' => $startDate,
                                                                 'endDate' => $endDate,
-                                                                'category' => \urlencode(\serialize($filterData->getCategories()->getValues())),
-                                                                'priceMin' => $filterData->getPriceMin(),
-                                                                'priceMax' => $filterData->getPriceMax(),
-                                                                'capacityMin' => $filterData->getCapacityMin(),
-                                                                'capacityMax' => $filterData->getCapacityMax(),
+                                                                'category' => \urlencode(\serialize($filterDto->getCategory())),
+                                                                'priceMin' => $filterDto->getPriceMin(),
+                                                                'priceMax' => $filterDto->getPriceMax(),
+                                                                'capacityMin' => $filterDto->getCapacityMin(),
+                                                                'capacityMax' => $filterDto->getCapacityMax(),
                                                                 ]);
         }
 
-        $searchResult = $service->searchHotels($requestData);
-
+        $searchResult = $service->searchHotels($requestData, $filterData);
 
         return $this->render('default/searchResult.html.twig', [
             'form' =>$filterForm->createView(),

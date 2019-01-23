@@ -1,14 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 31.12.18
- * Time: 4:04
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\Repository\Hotel;
 
-
+use App\Dto\HotelFilter;
 use App\Dto\HotelSearchForm;
 
 interface HotelRepositoryInterface
@@ -19,5 +18,5 @@ interface HotelRepositoryInterface
     public function findNumberOfHotels(int $count);
     public function findBookedHotelsByUser(int $id);
     public function findOwnedHotelsByUser(int $id);
-    public function findAllFiltered(HotelSearchForm $form);
+    public function findAllFiltered(HotelSearchForm $form, HotelFilter $filterDto);
 }

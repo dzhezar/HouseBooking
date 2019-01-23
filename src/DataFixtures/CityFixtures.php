@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dzhezar-bazar
- * Date: 04.01.19
- * Time: 18:26
+
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
  */
 
 namespace App\DataFixtures;
-
 
 use App\Entity\City;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -16,10 +14,9 @@ use Faker\Factory;
 
 class CityFixtures extends Fixture
 {
-
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 10; $i++){
+        for ($i = 0; $i < 10; $i++) {
             $faker = Factory::create();
             $city = new City();
 
@@ -30,6 +27,5 @@ class CityFixtures extends Fixture
             $this->addReference(City::class . '_' . $i, $city);
         }
         $manager->flush();
-
     }
 }

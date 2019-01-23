@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * This file is part of the "HouseBooking-project" package.
+ * (c) Dzhezar Kadyrov <dzhezik@gmail.com>
+ */
+
 namespace App\Repository;
 
 use App\Entity\Images;
@@ -7,8 +12,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Images|null find($id, $lockMode = null, $lockVersion = null)
- * @method Images|null findOneBy(array $criteria, array $orderBy = null)
+ * @method null|Images find($id, $lockMode = null, $lockVersion = null)
+ * @method null|Images findOneBy(array $criteria, array $orderBy = null)
  * @method Images[]    findAll()
  * @method Images[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */

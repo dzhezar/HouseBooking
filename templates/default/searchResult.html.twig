@@ -3,16 +3,22 @@
     <div class="container-fluid" style="padding-top: 40px; width: 85%">
         <div class="row">
         <div class="col-3">
-            <h4><b>Filter</b></h4>
+            <h3><b>Filter</b></h3>
             {{ form_start(form) }}
+            <h5>Choose categories below:</h5>
             {% for item in form.category %}
-                {{ form_row(item) }}
+                {{ form_widget(item) }}
+                {{ form_label(item) }}
+                <br>
             {% endfor %}
-            {#{{ form_row(form.category) }}#}
-            {{ form_row(form.priceMin) }}
+            <hr>
+            {{ form_label(form.priceMin) }}
+            {{ form_widget(form.priceMin) }}
             {{ form_row(form.priceMax) }}
-            {{ form_row(form.capacityMin) }}
+            {{ form_label(form.capacityMin) }}
+            {{ form_widget(form.capacityMin) }}
             {{ form_row(form.capacityMax) }}
+            <hr>
             <button type="submit" class="btn btn-primary">Submit filter</button>
             {{ form_end(form) }}
         </div>
@@ -30,7 +36,7 @@
             <div class="row" style="padding-bottom: 10px; border-radius: 15px; border-style: groove; padding-top: 10px; margin-bottom: 10px">
                 <div class="col-md-7">
                     <a href="{{ path('hotel', {'id': hotel.id}) }}">
-                        <img class="img-fluid rounded mb-3 mb-md-0" style="object-fit:cover; height: 300px; width: 100%; background-color: #c8c8c8 " src="/uploads/images/{{ hotel.images.shift.image }}" alt="/uploads/images/{{ hotel.images.shift.image }}">
+                        {#<img class="img-fluid rounded mb-3 mb-md-0" style="object-fit:cover; height: 300px; width: 100%; background-color: #c8c8c8 " src="/uploads/images/{{ hotel.images.shift.image }}" alt="/uploads/images/{{ hotel.images.shift.image }}">#}
                     </a>
                 </div>
                 <div class="col-md-5">
