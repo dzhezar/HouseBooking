@@ -22,7 +22,7 @@
                 <div id="ajax-result" class="ajax-result">
                 </div>
                     {{ form_widget(form.Guests,
-                        {'attr': {'class': 'form-group col-md-3', 'value': '2', 'min': '1', 'max': '15'}}) }}
+                        {'attr': {'class': 'form-group col-md-3', 'value': 2, 'min': 1, 'max': 10}}) }}
                 <div class="form-group col-md-8" style="margin: auto">
                         <input type="text" class="form-group" name="daterange" style="width: 100%" >
                 </div>
@@ -36,7 +36,9 @@
             {% for hotel in mainHotels %}
             <div class="col-lg-3 col-sm-6 portfolio-item">
                 <div class="card h-100">
-                    <a href="{{ path('hotel',{'id': hotel.id }) }}"><img class="card-img-top" src="{{ hotel.images.shift.image }}" alt=""></a>
+                        <a href="{{ path('hotel', {'id': hotel.id}) }}">
+                            <img class="card-img-top" style="height: 250px; object-fit: contain; width: 100%" src="/uploads/images/{{ hotel.images.shift.image }}" alt="Picture">
+                        </a>
                     <div class="card-body">
                         <h4 class="card-title">
                             <a href="{{ path('hotel',{'id': hotel.id }) }}">{{ hotel.name }}</a>

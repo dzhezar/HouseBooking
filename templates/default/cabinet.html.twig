@@ -6,7 +6,7 @@
             {% for bookedHotel in bookedHotels %}
                 <div class="col-lg-3 col-sm-6 portfolio-item">
                     <div class="card h-100">
-                        <a href="{{ path('hotel',{'id': bookedHotel.id }) }}"><img class="card-img-top" src="{{ bookedHotel.images.shift.image }}" alt=""></a>
+                        <a href="{{ path('hotel',{'id': bookedHotel.id }) }}"><img class="card-img-top" style="object-fit:cover; height: 300px; width: 100%; background-color: #c8c8c8" src="/uploads/images/{{ bookedHotel.images.shift.image }}" alt="Picture"></a>
                         <div class="card-body">
                             <h4 class="card-title">
                                 <a href="{{ path('hotel',{'id': bookedHotel.id }) }}">{{ bookedHotel.name }}</a>
@@ -31,7 +31,7 @@
         {% for ownedHotel in ownedHotels %}
             <div class="col-lg-3 col-sm-6 portfolio-item">
                 <div class="card h-100">
-                    <a href="{{ path('hotel',{'id': ownedHotel.id }) }}"><img class="card-img-top" style="object-fit:cover; height: 300px; width: 100%; background-color: #c8c8c8 " src="/uploads/images/{{ ownedHotel.images.shift.image }}" alt=""></a>
+                    <a href="{{ path('hotel',{'id': ownedHotel.id }) }}"><img class="card-img-top" style="object-fit:cover; height: 300px; width: 100%; background-color: #c8c8c8" src="/uploads/images/{{ ownedHotel.images.shift.image }}" alt="Picture"></a>
                     <div class="card-body">
                         <h4 class="card-title">
                             <a href="{{ path('hotel',{'id': ownedHotel.id }) }}">{{ ownedHotel.name }}</a>

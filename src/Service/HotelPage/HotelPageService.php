@@ -56,26 +56,21 @@ class HotelPageService implements HotelPageServiceInterface
 
     public function setCheckoutDays(string $id, array $form, User $user): int
     {
+
         $hotel = $this->getHotel($id);
 
-        try {
-            $interval = new \DateInterval('P1D');
-        } catch (\Exception $e) {
-        }
-        try {
-            $realEnd = new \DateTime($form['EndDate']);
-        } catch (\Exception $e) {
-        }
+        $interval = new \DateInterval('P1D');
+
+        $realEnd = new \DateTime($form['EndDate']);
+
         $realEnd->add($interval);
 
-        try {
-            $period = new \DatePeriod(
+        $period = new \DatePeriod(
                 new \DateTime($form['StartDate']),
                 $interval,
                 $realEnd
             );
-        } catch (\Exception $e) {
-        }
+
         $nightsCounter = -1;
 
         foreach ($period as $date) {

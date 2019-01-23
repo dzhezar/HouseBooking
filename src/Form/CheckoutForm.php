@@ -7,6 +7,7 @@
 
 namespace App\Form;
 
+use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -21,9 +22,21 @@ class CheckoutForm extends AbstractType
             ->add('FirstName', TextType::class)
             ->add('Surname', TextType::class)
             ->add('Email', EmailType::class)
-            ->add('StartDate', TextType::class)
-            ->add('EndDate', TextType::class)
+            ->add('StartDate', TextType::class,[
+                'data' => $this->getDates()['start']
+            ])
+            ->add('EndDate', TextType::class,[
+                'data' => $this->getDates()['end']
+            ])
             ->add('Guests', IntegerType::class)
         ;
+    }
+
+    private function getDates()
+    {
+        $dates['start'] = date('Y-m-d');
+        $date =  new DateTime();
+        $dates['end'] = $date->modify('+1 week')->format('Y-m-d');
+        return $dates;
     }
 }

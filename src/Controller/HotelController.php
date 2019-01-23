@@ -16,7 +16,6 @@ use App\Service\FilenameGeneration\FilenameGeneratorService;
 use App\Service\FilenameGeneration\StrategySha1;
 use App\Service\HotelPage\HotelPageServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 
 class HotelController extends AbstractController
@@ -88,13 +87,8 @@ class HotelController extends AbstractController
                 $fileName = $generatorService->getFilename();
                 $service->setImage($hotel, $fileName);
 
-                try {
-                    $image->move(
-                            $this->getParameter('images_directory'),
-                            $fileName
-                        );
-                } catch (FileException $e) {
-                }
+                $image->move($this->getParameter('images_directory'), $fileName);
+
             }
 
             return $this->redirectToRoute('cabinet');
