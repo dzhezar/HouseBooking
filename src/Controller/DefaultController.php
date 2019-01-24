@@ -93,7 +93,6 @@ class DefaultController extends AbstractController
         }
 
         $searchResult = $service->searchHotels($requestData, $filterData);
-
         return $this->render('default/searchResult.html.twig', [
             'form' =>$filterForm->createView(),
             'hotels' => $searchResult,
