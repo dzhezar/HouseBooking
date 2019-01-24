@@ -11,9 +11,11 @@
             {{ form_row(form.category,
                 { attr:
                     {class: 'form-control'}})}}
-            {{ form_row(form.capacity,
+            {{ form_row(form.capacity,,
+                {'attr': {'class': 'form-group col-md-3', 'value': '2', 'min': '1', 'max': '15'}}) }
                 { attr:
-                    {class: 'form-control'}})}}
+                    {class: 'form-control',
+                     min: 1, max: 10}})}}
             {{ form_row(form.description,
                 { attr:
                     {class: 'form-control'}})}}
