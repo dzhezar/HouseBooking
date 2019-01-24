@@ -142,7 +142,7 @@ class HotelPageService implements HotelPageServiceInterface
         $images = $this->em->getRepository(Images::class)->findBy(['hotel' => $hotel]);
 
         foreach ($images as $image) {
-            \unlink($imagesDir . '/' . $image->getImage());
+            //\unlink($imagesDir . '/' . $image->getImage());
             $this->em->remove($image);
         }
         $this->em->flush();
