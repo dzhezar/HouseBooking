@@ -36,9 +36,11 @@
             {% for hotel in mainHotels %}
             <div class="col-lg-3 col-sm-6 portfolio-item">
                 <div class="card h-100">
-                    <a href="{{ path('hotel', {'id': hotel.id}) }}">
-                        <img class="card-img-top" src="/uploads/images/{{ hotel.images.shift.image }}" alt="/uploads/images/{{ hotel.images.shift.image }}">
-                    </a>
+                    <div style="height: 300px; object-fit: contain; width: 100%">
+                        <a href="{{ path('hotel', {'id': hotel.id}) }}">
+                            <img class="card-img-top" src="/uploads/images/{{ hotel.images.shift.image }}" alt="/uploads/images/{{ hotel.images.shift.image }}">
+                        </a>
+                    </div>
                     <div class="card-body">
                         <h4 class="card-title">
                             <a href="{{ path('hotel',{'id': hotel.id }) }}">{{ hotel.name }}</a>
